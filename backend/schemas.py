@@ -1,4 +1,6 @@
 from pydantic import BaseModel,EmailStr
+from datetime import datetime
+
 
 class UserCreate(BaseModel):
     email:EmailStr
@@ -25,6 +27,15 @@ class ProfileCreate(BaseModel):
 class ProfileResponse(BaseModel):
     id:int
     user_id:int
+
+    class Config:
+        orm_mode=True
+
+class ConnectionResponse(BaseModel):
+    id:int
+    sender_id:int
+    receiver_id:int
+    created_at:datetime
 
     class Config:
         orm_mode=True
