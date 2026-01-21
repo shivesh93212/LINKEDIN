@@ -3,10 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import Base,engine
 from dependencies import get_current_user
 from fastapi.staticfiles import StaticFiles
-from models import User, Profile
+from models import User, Profile,Connection,Post
 from auth import router as auth_router
 from users import router as users_router
 from connections import router as connection_router
+from posts import router as post_router
+
 
 app=FastAPI(title="LinkedIn Backend")
 
@@ -38,3 +40,4 @@ app.mount("/uploads",StaticFiles(directory="uploads"),name="uploads")
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(connection_router)
+app.include_router(post_router)

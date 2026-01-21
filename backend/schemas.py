@@ -29,7 +29,8 @@ class ProfileResponse(BaseModel):
     user_id:int
 
     class Config:
-        orm_mode=True
+      from_attributes = True
+
 
 class ConnectionResponse(BaseModel):
     id:int
@@ -38,4 +39,17 @@ class ConnectionResponse(BaseModel):
     created_at:datetime
 
     class Config:
-        orm_mode=True
+      from_attributes = True
+
+class PostCreate(BaseModel):
+    content:str
+
+class PostResponse(BaseModel):
+    id:int
+    user_id:int
+    content:str
+    image_url:str|None
+    created_at:datetime
+
+    class Config:
+      from_attributes = True
