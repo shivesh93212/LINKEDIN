@@ -57,3 +57,12 @@ class Like(Base):
     __table_args__=(
         UniqueConstraint("user_id","post_id",name="unique_user_post_like"),
     )
+
+class Comment(Base):
+    __tablename__="comments"
+
+    id=Column(Integer,primary_key=True,index=True)
+    post_id=Column(Integer,ForeignKey("posts.id"))
+    user_id=Column(Integer,ForeignKey("users.id"))
+    content=Column(String,nullable=False)
+    created_at=Column(DateTime(timezone=True),server_default=func.now())

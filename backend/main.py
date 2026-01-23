@@ -9,6 +9,8 @@ from users import router as users_router
 from connections import router as connection_router
 from posts import router as post_router
 from likes import router as like_router
+from comments import router as comment_router
+
 
 app=FastAPI(title="LinkedIn Backend")
 
@@ -42,3 +44,4 @@ app.include_router(users_router)
 app.include_router(connection_router)
 app.include_router(post_router)
 app.include_router(like_router)
+app.include_router(comment_router)
