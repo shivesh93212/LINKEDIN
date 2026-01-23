@@ -1,10 +1,16 @@
-from fastapi import APIRouter,Depends,HTTPException
+from fastapi import APIRouter,Depends,HTTPException,UploadFile,File
 from database import get_db
 from schemas import PostResponse,PostCreate
 from models import Post,Connection
 from dependencies import get_current_user
 from sqlalchemy.orm import Session
+import os
+import uuid
+import shutil
 
+
+POST_UPLOAD_DIR = "uploads/posts"
+os.makedirs(POST_UPLOAD_DIR, exist_ok=True)
 
 
 router=APIRouter(prefix="/posts",tags=["posts"])
@@ -74,4 +80,41 @@ def delete_post(post_id:int,current_user=Depends(get_current_user),db:Session=De
     db.commit()
 
     return {"message":"Post Deleted"}
+
+
+# post image upload
+
+@router.post("/{post_id}/image")
+def upload_post_image(
+    post_id:int,
+    file:UploadFile=File(...),
+    current_user=Depends(get_current_user),
+    db:Session=Depends(get_db)
+):
+    post=db.query(Post).filter(Post.id==post_id,Post.user_id==current_user.id).first()
+
+    if not post:
+        raise HTTPException(404,"Post not Found or not authorized")
+    
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(400,"Only image files allowed")
+    
+    filename=f"{uuid.uuid4()}_{file.filename}"
+    file_path=os.path.join(POST_UPLOAD_DIR,filename)
+
+    try:
+
+        with open(file_path,"wb") as buffer:
+            shutil.copyfileobj(file.file,buffer)
+    finally:
+        file.file.close()
+
+        post.image_url=f"uplodas/posts/{filename}"
+        db.commit()
+        db.refresh(post)
+
+    return {
+        "message":"Post image uploaded successfully",
+        "image_url":post.image_url
+    }
 

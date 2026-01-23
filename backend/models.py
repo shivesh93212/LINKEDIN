@@ -1,4 +1,4 @@
-from sqlalchemy import Column,String,Integer,Boolean,ForeignKey,DateTime
+from sqlalchemy import Column,String,Integer,Boolean,ForeignKey,DateTime,UniqueConstraint
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -45,3 +45,15 @@ class Post(Base):
     content=Column(String,nullable=False)
     image_url=Column(String,nullable=True)
     created_at=Column(DateTime(timezone=True),server_default=func.now())
+
+class Like(Base):
+    __tablename__="likes"
+
+    id=Column(Integer,primary_key=True,index=True)
+    user_id=Column(Integer,ForeignKey("users.id"))
+    post_id=Column(Integer,ForeignKey("posts.id"))
+    created_at=Column(DateTime(timezone=True),server_default=func.now())
+
+    __table_args__=(
+        UniqueConstraint("user_id","post_id",name="unique_user_post_like"),
+    )
