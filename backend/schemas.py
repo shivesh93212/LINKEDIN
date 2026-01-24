@@ -28,7 +28,7 @@ class ProfileResponse(BaseModel):
     id:int
     user_id:int
     name:str
-    
+
     class Config:
       from_attributes = True
 
@@ -80,3 +80,21 @@ class CommentResponse(BaseModel):
    class Config:
       from_attributes=True
 
+class MessageCreate(BaseModel):
+   receiver_id:int
+   content:str
+
+class MessageResponse(BaseModel):
+   id:int
+   sender_id:int
+   receiver_id:int
+   content:str
+   is_read:bool
+   created_at:datetime
+
+   class Config:
+      from_attributes=True
+
+
+      
+   

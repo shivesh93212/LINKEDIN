@@ -10,7 +10,7 @@ router=APIRouter(prefix="/comments",tags=["comments"])
 # add comment on post
 
 @router.post("/{post_id}",response_model=CommentResponse)
-def add_comment(post_id:int,data:CommentCreate,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
+def add_comment_and_reply(post_id:int,data:CommentCreate,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
     post=db.query(Post).filter(Post.id==post_id).first()
     
     if not post:
@@ -22,8 +22,8 @@ def add_comment(post_id:int,data:CommentCreate,current_user=Depends(get_current_
             Comment.post_id==post_id
         ).first()
 
-        # if not parent:
-        #     raise HTTPException(404,"Parent comment not found")
+        if not parent:
+            raise HTTPException(404,"Parent comment not found")
         
 
     comment=Comment(

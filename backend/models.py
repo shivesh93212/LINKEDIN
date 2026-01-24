@@ -1,4 +1,4 @@
-from sqlalchemy import Column,String,Integer,Boolean,ForeignKey,DateTime,UniqueConstraint
+from sqlalchemy import Column,String,Integer,Boolean,ForeignKey,DateTime,UniqueConstraint,Boolean
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -68,5 +68,15 @@ class Comment(Base):
 
     # for reply
     parent_id=Column(Integer,ForeignKey("comments.id"),nullable=True)
-    
+
+    created_at=Column(DateTime(timezone=True),server_default=func.now())
+
+class Message(Base):
+    __tablename__="messages"
+
+    id=Column(Integer,primary_key=True,index=True)
+    sender_id=Column(Integer,ForeignKey("users.id"))
+    receiver_id=Column(Integer,ForeignKey("users.id"))
+    content=Column(String,nullable=False)
+    is_read=Column(Boolean,default=False)
     created_at=Column(DateTime(timezone=True),server_default=func.now())
