@@ -65,4 +65,8 @@ class Comment(Base):
     post_id=Column(Integer,ForeignKey("posts.id"))
     user_id=Column(Integer,ForeignKey("users.id"))
     content=Column(String,nullable=False)
+
+    # for reply
+    parent_id=Column(Integer,ForeignKey("comments.id"),nullable=True)
+    
     created_at=Column(DateTime(timezone=True),server_default=func.now())

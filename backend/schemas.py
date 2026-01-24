@@ -27,7 +27,8 @@ class ProfileCreate(BaseModel):
 class ProfileResponse(BaseModel):
     id:int
     user_id:int
-
+    name:str
+    
     class Config:
       from_attributes = True
 
@@ -66,13 +67,14 @@ class LikeResponse(BaseModel):
 
 class CommentCreate(BaseModel):
    content:str
-
+   parent_id:int | None=None
    
 class CommentResponse(BaseModel):
    id:int
    post_id:int
    user_id:int
    content:str
+   parent_id:int | None
    created_at:datetime
 
    class Config:

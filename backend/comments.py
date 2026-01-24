@@ -16,6 +16,16 @@ def add_comment(post_id:int,data:CommentCreate,current_user=Depends(get_current_
     if not post:
         raise HTTPException(404,"Post not Found")
     
+    if data.parent_id:
+        parent=db.query(Comment).filter(
+            Comment.id==data.parent_id,
+            Comment.post_id==post_id
+        ).first()
+
+        # if not parent:
+        #     raise HTTPException(404,"Parent comment not found")
+        
+
     comment=Comment(
         post_id=post_id,
         user_id=current_user.id,
@@ -51,3 +61,4 @@ def delete_comment(comment_id:int,current_user=Depends(get_current_user),db:Sess
     db.commit()
 
     return {"message":"comment deleted"}
+

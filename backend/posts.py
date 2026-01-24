@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Depends,HTTPException,UploadFile,File
+from fastapi import APIRouter,Depends,HTTPException,UploadFile,File,Query
 from database import get_db
 from schemas import PostResponse,PostCreate
 from models import Post,Connection
@@ -43,7 +43,9 @@ def my_posts(current_user=Depends(get_current_user),db:Session=Depends(get_db)):
 # Feed 
 
 @router.get("/feed",response_model=list[PostResponse])
-def feed(current_user=Depends(get_current_user),db:Session=Depends(get_db)):
+def feed(page:int=Query(1,ge=1),limit:int=Query(10,le=50),current_user=Depends(get_current_user),db:Session=Depends(get_db)):
+    
+    offset=(page-1)*limit
 
     connections=db.query(Connection).filter(
         (
@@ -62,7 +64,10 @@ def feed(current_user=Depends(get_current_user),db:Session=Depends(get_db)):
 
     return db.query(Post).filter(
         Post.user_id.in_(user_ids)
-    ).order_by(Post.created_at.desc()).all()
+    ).order_by(Post.created_at.desc())\
+     .limit(limit)\
+     .offset(offset)\
+     .all()
 
 
 
