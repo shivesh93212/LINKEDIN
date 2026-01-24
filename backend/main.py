@@ -12,6 +12,9 @@ from likes import router as like_router
 from comments import router as comment_router
 from search import router as search_router
 from chat import router as chat_router
+from chat_ws import router as chat_ws_router
+
+
 
 app=FastAPI(title="LinkedIn Backend")
 
@@ -48,3 +51,4 @@ app.include_router(like_router)
 app.include_router(comment_router)
 app.include_router(search_router)
 app.include_router(chat_router)
+app.include_router(chat_ws_router)
