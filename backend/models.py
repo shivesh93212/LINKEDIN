@@ -12,6 +12,7 @@ class User(Base):
     email=Column(String,unique=True,index=True)
     password=Column(String)
     is_active=Column(Boolean,default=True)
+    role=Column(String,default="user")
 
 class Profile(Base):
     __tablename__ = "profiles"
@@ -90,4 +91,14 @@ class Notification(Base):
     type=Column(String,nullable=False)
     reference_id=Column(Integer,nullable=True)
     is_read=Column(Boolean,default=False)
+    created_at=Column(DateTime(timezone=True),server_default=func.now())
+
+class Report(Base):
+    __tablename__="reports"
+
+    id=Column(Integer,primary_key=True,index=True)
+    reporter_id=Column(Integer,ForeignKey("users.id"))
+    target_user_id=Column(Integer,nullable=True)
+    post_id=Column(Integer,nullable=True)
+    reason=Column(String)
     created_at=Column(DateTime(timezone=True),server_default=func.now())

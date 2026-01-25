@@ -5,6 +5,7 @@ from database import get_db
 from security import decode_token
 from models import User
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 def get_current_user(
@@ -21,5 +22,22 @@ def get_current_user(
     
     user=db.query(User).filter(User.id==user_id).first()
     if not user:
-        raise HTTPException(402,"User Not Found")
+        raise HTTPException(404,"User Not Found")
+    
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is blocked"
+        )
+    
     return user
+
+def admin_required(
+    current_user: User = Depends(get_current_user)
+):
+    if str(current_user.role) != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access only"
+        )
+    return current_user
