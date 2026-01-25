@@ -4,12 +4,14 @@ from database import get_db
 from models import Like,Post
 from schemas import LikeResponse
 from dependencies import get_current_user
+from notifications import create_notification
+
 
 router=APIRouter(prefix="/likes",tags=["likes"])
 
 # like post
 
-@router.post("/post_id",response_model=LikeResponse)
+@router.post("/{post_id}",response_model=LikeResponse)
 def like_post(post_id:int,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
     post=db.query(Post).filter(Post.id==post_id).first()
 
@@ -33,7 +35,18 @@ def like_post(post_id:int,current_user=Depends(get_current_user),db:Session=Depe
     db.commit()
     db.refresh(like)
 
-    return like
+# like notification 
+
+    if post.user_id != current_user.id:
+            create_notification(
+                db=db,
+                user_id=post.user_id,
+                actor_id=current_user.id,
+                type="like",
+                reference_id=post.id
+            )
+
+    return {"message": "Post liked"}
 
 # unlike post
 

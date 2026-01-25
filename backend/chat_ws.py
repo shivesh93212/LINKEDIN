@@ -5,6 +5,11 @@ from models import Message
 from websocket_manager import ConnectionManager
 from jose import jwt, JWTError
 import os
+from notifications import create_notification
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 router = APIRouter()
 manager = ConnectionManager()
@@ -20,6 +25,7 @@ def get_user_from_token(token: str):
     except JWTError:
         return None
 
+# chat 
 
 @router.websocket("/ws/chat")
 async def websocket_chat(
@@ -56,6 +62,15 @@ async def websocket_chat(
             db.commit()
             db.refresh(message)
 
+            if receiver_id != user_id:
+                create_notification(
+                    db=db,
+                    user_id=receiver_id,
+                    actor_id=user_id,
+                    type="message",
+                    reference_id=message.id
+                )
+
             payload = {
                 "sender_id": user_id,
                 "content": content,
@@ -66,3 +81,4 @@ async def websocket_chat(
 
     except WebSocketDisconnect:
         manager.disconnect(user_id)
+

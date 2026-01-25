@@ -4,6 +4,8 @@ from dependencies import get_current_user
 from models import Post,Comment
 from schemas import CommentResponse,CommentCreate
 from sqlalchemy.orm import Session
+from notifications import create_notification
+
 
 router=APIRouter(prefix="/comments",tags=["comments"])
 
@@ -36,7 +38,16 @@ def add_comment_and_reply(post_id:int,data:CommentCreate,current_user=Depends(ge
     db.commit()
     db.refresh(comment)
 
-    return comment
+    if post.user_id != current_user.id:
+        create_notification(
+            db=db,
+            user_id=post.user_id,
+            actor_id=current_user.id,
+            type="comment",
+            reference_id=comment.id
+        )
+
+    return {"message": "Comment added"}
 
 # get comment on post
 

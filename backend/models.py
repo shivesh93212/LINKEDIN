@@ -80,3 +80,14 @@ class Message(Base):
     content=Column(String,nullable=False)
     is_read=Column(Boolean,default=False)
     created_at=Column(DateTime(timezone=True),server_default=func.now())
+
+class Notification(Base):
+    __tablename__="notification"
+
+    id=Column(Integer,primary_key=True,index=True)
+    user_id=Column(Integer,ForeignKey("users.id"))
+    actor_id=Column(Integer,ForeignKey("users.id"))
+    type=Column(String,nullable=False)
+    reference_id=Column(Integer,nullable=True)
+    is_read=Column(Boolean,default=False)
+    created_at=Column(DateTime(timezone=True),server_default=func.now())

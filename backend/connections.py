@@ -4,6 +4,7 @@ from database import get_db
 from models import Connection,User
 from schemas import ConnectionResponse
 from dependencies import get_current_user
+from notifications import create_notification
 
 
 router=APIRouter(prefix="/connections",tags=["connections"])
@@ -40,7 +41,16 @@ def send_request(user_id:int,current_user=Depends(get_current_user),db:Session=D
     db.commit()
     db.refresh(connection)
 
-    return connection
+    create_notification(
+        db=db,
+        user_id=user_id,                 # receiver
+        actor_id=current_user.id,        # sender
+        type="connection_request",
+        reference_id=connection.id
+    )
+
+    return {"message": "Connection request sent"}
+
 
 # accept request
 
@@ -57,7 +67,15 @@ def accept_request(request_id:int,current_user=Depends(get_current_user),db:Sess
     db.commit()
     db.refresh(connection)
 
-    return connection
+    create_notification(
+        db=db,
+        user_id=connection.sender_id,    # original sender
+        actor_id=current_user.id,        # acceptor
+        type="connection_accepted",
+        reference_id=connection.id
+    )
+
+    return {"message": "Connection accepted"}
 
 # reject request
 

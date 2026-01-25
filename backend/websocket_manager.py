@@ -15,3 +15,4 @@ class ConnectionManager:
         websocket = self.active_connections.get(user_id)
         if websocket:
             await websocket.send_json(message)
+            

@@ -96,5 +96,15 @@ class MessageResponse(BaseModel):
       from_attributes=True
 
 
-      
+class NotificationResponse(BaseModel):
+   id:int
+   user_id:int
+   actor_id:int
+   type:str
+   reference_id:int|None
+   is_read:bool
+   created_at:datetime
+
+   class Config:
+      from_attributes=True
    
