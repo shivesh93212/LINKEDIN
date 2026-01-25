@@ -111,6 +111,11 @@ class NotificationResponse(BaseModel):
 class ReportCreate(BaseModel):
    reason:str
 
+class ReportActionResponse(BaseModel):
+    message: str
+    auto_action: str | None = None
+
+
 class ReportResponse(BaseModel):
    id:int
    reporter_id:int

@@ -35,7 +35,7 @@ def create_post(data:PostCreate,current_user=Depends(get_current_user),db:Sessio
 @router.get("/my",response_model=list[PostResponse])
 def my_posts(current_user=Depends(get_current_user),db:Session=Depends(get_db)):
 
-    post=db.query(Post).filter(Post.user_id==current_user.id).order_by(Post.created_at.desc()).all()
+    post=db.query(Post).filter(Post.is_deleted == False).order_by(Post.created_at.desc()).all()
     
     return post
 
