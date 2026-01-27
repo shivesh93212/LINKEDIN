@@ -21,6 +21,7 @@ from reports import router as report_router
 
 app=FastAPI(title="LinkedIn Backend")
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
