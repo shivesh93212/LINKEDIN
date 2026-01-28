@@ -103,3 +103,7 @@ class Report(Base):
     post_id=Column(Integer,nullable=True)
     reason=Column(String)
     created_at=Column(DateTime(timezone=True),server_default=func.now())
+
+    __table__args=(
+        UniqueConstraint("reporter_id","post_id",name="unque_post_report"),
+    )

@@ -5,7 +5,7 @@ from schemas import ReportCreate,ReportActionResponse
 from sqlalchemy.orm import Session
 from dependencies import get_current_user
 from auto_moderation import run_auto_moderation
-
+from models import Post
 
 router=APIRouter(prefix="/reports",tags=["reports"])
 
@@ -36,6 +36,22 @@ def report_post(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    post = db.query(Post).filter(Post.id == post_id).first()
+
+    if not post:
+        raise HTTPException(404, "Post not found")
+
+    if post.user_id==current_user.id:
+        raise HTTPException(400,"You Cannot report your own post")
+    
+    existing=db.query(Report).filter(
+        Report.reporter_id==current_user.id,
+        Report.post_id==post_id
+    ).first()
+
+    if existing:
+        raise HTTPException(400,"You already reported this post")
+    
     report = Report(
         reporter_id=current_user.id,
         post_id=post_id,

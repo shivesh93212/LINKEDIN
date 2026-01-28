@@ -47,7 +47,7 @@ def add_comment_and_reply(post_id:int,data:CommentCreate,current_user=Depends(ge
             reference_id=comment.id
         )
 
-    return {"message": "Comment added"}
+    return comment
 
 # get comment on post
 
