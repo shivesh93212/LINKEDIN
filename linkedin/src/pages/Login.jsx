@@ -69,12 +69,12 @@ export default function Login(){
         </button>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-            New to LinkedIn{""}
+            New to LinkedIn?{""}
             <Link
             to="/register"
-            className="text-blue-600 font-semibold hover:underline"
+            className="text-blue-600 font-semibold  hover:underline"
             >
-                Join now
+                Sign up
             </Link>
         </p>
             </div>
