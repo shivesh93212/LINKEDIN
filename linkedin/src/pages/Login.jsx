@@ -1,10 +1,53 @@
 
-import React from "react"
-import {Link} from "react-router-dom"
+import React, {useState} from "react"
+import {Link,useNavigate} from "react-router-dom"
 import AuthLayout from "../components/Auth/AuthLayout"
+import {loginUser} from "../api/authApi"
+
 
 export default function Login(){
+       const navigate=useNavigate()
 
+       const [email,setEmail]=useState("")
+       const [password,setPassword]=useState("")
+
+       const [loading,setLoading]=useState(false)
+       const [error,setError]=useState("")
+
+       const handleLogin = async (e)=>{
+        e.preventDefault()
+        setError("")
+
+        try{
+            setLoading(true)
+
+            const data=await loginUser(email,password)
+            if(!data){
+                setError("No response from backend!")
+                return
+            }
+
+            if(!data.access_token){
+                setError("Token missing in response!")
+                    return
+            
+            }
+
+            localStorage.setItem("token",data.access_token)
+            console.log("LOGIN SUCCESS, GOING HOME...");
+            navigate("/")
+        }
+
+        catch(err){
+            setError(err.response?.data?.detail || "Login failed")
+
+       }
+
+       finally{
+        setLoading(false)
+       }
+
+       }
     return (
         <AuthLayout>
             <div className="bg-white w-full max-w-md rounded-xl shadow-md p-6 sm:p-8">
@@ -15,8 +58,15 @@ export default function Login(){
                 <p className="text-sm text-gray-600 mt-1">
                     Stay updated on your professional world
                 </p>
+                
+                {error && (
+                    <div className="mt-4 bg-red-100 text-red-700 text-sm p-3 rounded-lg">
+                        {error}
+                        </div>
+                )}
 
-                <form className="mt-6 space-y-4">
+                
+                <form  onSubmit={handleLogin} className="mt-6 space-y-4">
                     <div>
                         <label className="text-sm text-gray-700 font-medium">
                             Email or Phone
@@ -25,6 +75,8 @@ export default function Login(){
                             <input
                             type="text"
                             placeholder="Enter email or phone"
+                            value={email}
+                            onChange={(e)=> setEmail(e.target.value)}
                             className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
                             />
                         </div>
@@ -35,8 +87,10 @@ export default function Login(){
                             </label>
 
                             <input 
-                            type="text"
+                            type="password"
                             placeholder="Enter password"
+                            value={password}
+                            onChange={(e)=> setPassword(e.target.value)}
                             className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
                             />
                         </div>
@@ -54,7 +108,7 @@ export default function Login(){
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 rounded-full font-semibold hover:bg-blue-700 transtion"
                         >
-                            Sign in
+                            {loading ? "Signing in..." : "Sign in" }
                         </button>
                 </form>
 
