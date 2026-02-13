@@ -17,10 +17,11 @@ def signup(user:UserCreate,db:Session=Depends(get_db)):
     user_email=db.query(User).filter(User.email==user.email).first()
 
     if user_email:
-        raise HTTPException(400,"Email Aleready register")
+        raise HTTPException(400,"Email aleready registered")
     
     hashed=pwd_context.hash(user.password[:72])
     new_user=User(
+        name=user.name,
         email=user.email,
         password=hashed
     )
@@ -43,6 +44,11 @@ def login(data:OAuth2PasswordRequestForm = Depends(),db:Session=Depends(get_db))
     token=create_access_token({"user_id":user_email.id})
 
     return {
-        "access_token":token,
-        "token_type":"bearer"
+        "access_token": token,
+        "token_type": "bearer",
+        # "user_id": user_email.id,
+        # "name": user_email.name,
+        # "email": user_email.email,
+        # "role": user_email.role
     }
+    
