@@ -69,7 +69,7 @@ export default function DesktopNavbar(){
                 >
                     <Bell size={26} />
                     <span>Notifications</span>
-                    <span className="absolute -top-1 -right-4 bg-red-600 text-white text-[10px] px-1.5 rounded-full">
+                    <span className="absolute -top-1 right-2 bg-red-600 text-white text-[10px] px-1.5 rounded-full">
                         13
                     </span>
                 </Link>
