@@ -114,7 +114,7 @@ def upload_post_image(
     finally:
         file.file.close()
 
-        post.image_url=f"uplodas/posts/{filename}"
+        post.image_url=f"uploads/posts/{filename}"
         db.commit()
         db.refresh(post)
 
