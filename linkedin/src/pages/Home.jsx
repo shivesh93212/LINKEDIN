@@ -1,9 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import CreatePostModel from "../components/Post/CreatePostModel";
+import { getFeedPosts } from "../api/postApi";
+import PostCard from "../components/Post/PostCard";
 
 function Home() {
   const [isPostModelOpen, setIsPostModelOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
+
+  const fetchFeed = async () => {
+    try {
+      const data = await getFeedPosts(1, 10);
+      setPosts(data);
+    } catch (err) {
+      console.log("Feed error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchFeed();
+  }, []);
+
+  const handleDeleteFromUI = (postId) => {
+    setPosts(posts.filter((p) => p.id !== postId));
+  };
 
   return (
     <div className="min-h-screen bg-[#f3f2ef] pb-16 md:pb-0">
@@ -11,7 +31,6 @@ function Home() {
 
       <div className="max-w-6xl mx-auto px-3 sm:px-6 mt-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          
           {/* LEFT SIDEBAR */}
           <div className="hidden md:block md:col-span-3">
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -32,24 +51,11 @@ function Home() {
                   Full Stack Developer | MERN | DSA
                 </p>
               </div>
-
-              <div className="border-t border-gray-200 p-3 text-sm text-gray-700">
-                <div className="flex justify-between">
-                  <span>Profile viewers</span>
-                  <span className="text-blue-600 font-semibold">70</span>
-                </div>
-
-                <div className="flex justify-between mt-2">
-                  <span>Post impressions</span>
-                  <span className="text-blue-600 font-semibold">28</span>
-                </div>
-              </div>
             </div>
           </div>
 
           {/* CENTER FEED */}
           <div className="md:col-span-6 space-y-4">
-            
             {/* CREATE POST BOX */}
             <div className="bg-white rounded-xl border border-gray-200 p-4">
               <div className="flex items-center gap-3">
@@ -66,65 +72,18 @@ function Home() {
                   Start a post
                 </button>
               </div>
-
-              <div className="flex justify-between mt-4 text-sm text-gray-600">
-                <button className="hover:bg-gray-100 px-3 py-2 rounded-md">
-                  🎥 Video
-                </button>
-
-                <button className="hover:bg-gray-100 px-3 py-2 rounded-md">
-                  🖼 Photo
-                </button>
-
-                <button className="hover:bg-gray-100 px-3 py-2 rounded-md">
-                  📝 Write article
-                </button>
-              </div>
             </div>
 
-            {/* SAMPLE POST */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <div className="flex items-start gap-3">
-                <img
-                  src="https://i.pravatar.cc/50?img=12"
-                  alt="user"
-                  className="w-12 h-12 rounded-full"
-                />
-
-                <div>
-                  <h3 className="font-semibold text-gray-900">
-                    Harsh Kumar Geed
-                  </h3>
-
-                  <p className="text-xs text-gray-500">
-                    Full Stack Developer | MERN | DSA
-                  </p>
-
-                  <p className="text-xs text-gray-400 mt-1">
-                    3h • 🌍
-                  </p>
-                </div>
-              </div>
-
-              <p className="mt-3 text-sm text-gray-800">
-                I recently crossed 600+ problems solved on LeetCode 🚀
+            {/* POSTS LIST */}
+            {posts.length === 0 ? (
+              <p className="text-center text-gray-500 text-sm">
+                No posts found...
               </p>
-
-              <div className="mt-3">
-                <img
-                  src="https://picsum.photos/600/350"
-                  alt="post"
-                  className="rounded-lg w-full"
-                />
-              </div>
-
-              <div className="flex justify-between mt-3 text-sm text-gray-600">
-                <button className="hover:text-blue-600">👍 Like</button>
-                <button className="hover:text-blue-600">💬 Comment</button>
-                <button className="hover:text-blue-600">🔁 Repost</button>
-                <button className="hover:text-blue-600">📤 Send</button>
-              </div>
-            </div>
+            ) : (
+              posts.map((post) => (
+                <PostCard key={post.id} post={post} onDelete={handleDeleteFromUI} />
+              ))
+            )}
           </div>
 
           {/* RIGHT SIDEBAR */}
@@ -141,32 +100,9 @@ function Home() {
                     10h ago • 1,069 readers
                   </p>
                 </li>
-
-                <li>
-                  <p className="font-medium text-gray-800">
-                    World Cup opens to record viewership
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    12h ago • 2,294 readers
-                  </p>
-                </li>
-
-                <li>
-                  <p className="font-medium text-gray-800">
-                    Where Indians love travelling
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    12h ago • 1,948 readers
-                  </p>
-                </li>
               </ul>
-
-              <button className="mt-4 text-sm font-semibold text-gray-700 hover:underline">
-                Show more
-              </button>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -174,6 +110,7 @@ function Home() {
       <CreatePostModel
         isOpen={isPostModelOpen}
         onClose={() => setIsPostModelOpen(false)}
+        onPostCreated={fetchFeed}
       />
     </div>
   );

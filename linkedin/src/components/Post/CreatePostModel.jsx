@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { X, Image, Video, Calendar, FileText } from "lucide-react";
+import { createPost,uploadPostImage } from "../../api/postApi";
 
-export default function CreatePostModel({ isOpen, onClose }) {
+export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
   const [content, setContent] = useState("");
+  const [selectedImage,setSelectedImage]=useState("")
+
+  const [loading,setLoading]=useState(false)
+  const [err,setErr]=useState("")
+
 
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
-        onClose(); // ✅ fixed
+        onClose();
       }
     };
 
@@ -20,8 +26,45 @@ export default function CreatePostModel({ isOpen, onClose }) {
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null; // ✅ fixed
+  useEffect(()=>{
+    if(isOpen){
+      setContent("")
+      setSelectedImage(null)
+      setErr("")
+    }
+  },[isOpen])
 
+  if (!isOpen) return null;
+
+
+
+  const handleImageChange=(e)=>{
+    if(e.target.files && e.target.files[0]){
+      setSelectedImage(e.target.files[0])
+    }
+  }
+
+  const handleCreatePost=async()=>{
+    setErr("")
+    try{
+      setLoading(true)
+      const post=await createPost(content)
+      if(selectedImage){
+        await uploadPostImage(post.id,selectedImage)
+      }
+      if(onPostCreated){
+        onPostCreated()
+      }
+      onClose()
+    }
+    catch(err){
+      setErr(err.response?.data?.detail || "Post creation failed")
+    }
+
+    finally{
+      setLoading(false)
+    }
+  }
   return (
     <div 
     onClick={onClose}
@@ -56,7 +99,14 @@ export default function CreatePostModel({ isOpen, onClose }) {
             <p className="text-xs text-gray-500">Post to Anyone</p>
           </div>
         </div>
-
+         
+         {err && (
+          <div className="px-4 pb-2">
+            <p className="text-sm text-red-600 bg-red-100 p-2 rounded-md">
+              {err}
+            </p>
+            </div>
+         )}
         {/* TEXTAREA */}
         <div className="px-4">
           <textarea
@@ -67,11 +117,34 @@ export default function CreatePostModel({ isOpen, onClose }) {
           />
         </div>
 
+        {selectedImage && (
+          <div className="px-4 mt-3">
+            <div className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
+              <p className="text-sm text-gray-700 truncate">
+                {selectedImage.name}
+              </p>
+
+              <button
+              onClick={()=>setSelectedImage(null)}
+              className="text-sm text-red-600 font-semibold">
+                Remove
+              </button>
+
+              </div>
+              </div>
+        )}
+
         {/* OPTIONS */}
         <div className="flex items-center gap-3 px-4 py-3 border-t border-gray-200 text-gray-600">
-          <button className="p-2 rounded-full hover:bg-gray-200">
-            <Image size={20} />
-          </button>
+          <label className="p-2 rounded-full hover:bg-gray-100 cursor-pointer">
+            <Image size={20}/>
+            <input
+            type="file"
+            accept="/image"
+            className="hidden"
+            onChange={handleImageChange}
+            />
+          </label>
 
           <button className="p-2 rounded-full hover:bg-gray-200">
             <Video size={20} />
@@ -88,10 +161,12 @@ export default function CreatePostModel({ isOpen, onClose }) {
 
         {/* FOOTER */}
         <div className="flex justify-end px-4 py-3">
-          <button disabled={!content.trim()}
+          <button 
+          onClick={handleCreatePost}
+          disabled={!content.trim() || loading}
           className="bg-blue-600 text-white px-6 rounded-full font-semibold disabled:opacity-50 hover:bg-blue-700 transition"
           >
-            Post
+            {loading ? "Posting" : "Post"}
           </button>
         </div>
       </div>
