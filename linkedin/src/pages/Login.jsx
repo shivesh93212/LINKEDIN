@@ -1,5 +1,5 @@
 
-import React, {useState} from "react"
+import React, {useState,useEffect} from "react"
 import {Link,useNavigate} from "react-router-dom"
 import AuthLayout from "../components/Auth/AuthLayout"
 import {loginUser} from "../api/authApi"
@@ -35,7 +35,7 @@ export default function Login(){
 
             localStorage.setItem("token",data.access_token)
             console.log("LOGIN SUCCESS, GOING HOME...");
-            navigate("/")
+            navigate("/",{replace:true})
         }
 
         catch(err){
@@ -46,6 +46,14 @@ export default function Login(){
        finally{
         setLoading(false)
        }
+
+       useEffect(()=>{
+          const token=localStorage.get("token")
+
+          if(token){
+            navigate("/",{replace:true})
+          }
+       },[navigate])
 
        }
     return (

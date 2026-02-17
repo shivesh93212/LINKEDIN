@@ -1,5 +1,5 @@
 
-import React,{useState} from "react"
+import React,{useState,useEffect} from "react"
 import {Link,useNavigate} from "react-router-dom"
 import AuthLayout from "../components/Auth/AuthLayout"
 import {signupUser} from "../api/authApi"
@@ -43,6 +43,13 @@ export default function Register(){
         finally{
             setLoading(false)
         }
+
+        useEffect(()=>{
+            const token=localStorage.getItem("token")
+            if(token){
+                navigate("/",{replace:true})
+            }
+        },[navigate])
     }
 
 
