@@ -1,14 +1,14 @@
 import axiosInstance from "./axiosInstance";
 
 export const createPost=async(content)=>{
-    const response =await axiosInstance.post("/post/",{
+    const response =await axiosInstance.post("/posts/",{
         content,
     })
     return response.data
 }
 
 export const getFeedPosts=async (page=1,limit=10)=>{
-    const response=await axiosInstance.get(`/post/feed?page=${page}&limit=${limit}`)
+    const response=await axiosInstance.get(`/posts/feed?page=${page}&limit=${limit}`)
     return response.data
 }
 

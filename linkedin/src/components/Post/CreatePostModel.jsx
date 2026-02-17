@@ -163,7 +163,7 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
         <div className="flex justify-end px-4 py-3">
           <button 
           onClick={handleCreatePost}
-          disabled={!content.trim() || loading}
+          disabled={!content.trim() && !selectedImage || loading}
           className="bg-blue-600 text-white px-6 rounded-full font-semibold disabled:opacity-50 hover:bg-blue-700 transition"
           >
             {loading ? "Posting" : "Post"}
