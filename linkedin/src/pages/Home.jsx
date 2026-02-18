@@ -4,6 +4,7 @@ import CreatePostModel from "../components/Post/CreatePostModel";
 import { getFeedPosts } from "../api/postApi";
 import PostCard from "../components/Post/PostCard";
 
+
 function Home() {
   const [isPostModelOpen, setIsPostModelOpen] = useState(false);
   const [posts, setPosts] = useState([]);
