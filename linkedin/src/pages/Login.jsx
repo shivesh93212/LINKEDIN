@@ -12,7 +12,15 @@ export default function Login(){
        const [password,setPassword]=useState("")
 
        const [loading,setLoading]=useState(false)
-       const [error,setError]=useState("")
+       const [error,setError]=useState("") 
+
+        useEffect(()=>{
+          const token=localStorage.get("token")
+
+          if(token){
+            navigate("/",{replace:true})
+          }
+       },[navigate])
 
        const handleLogin = async (e)=>{
         e.preventDefault()
@@ -47,13 +55,7 @@ export default function Login(){
         setLoading(false)
        }
 
-       useEffect(()=>{
-          const token=localStorage.get("token")
-
-          if(token){
-            navigate("/",{replace:true})
-          }
-       },[navigate])
+      
 
        }
     return (
