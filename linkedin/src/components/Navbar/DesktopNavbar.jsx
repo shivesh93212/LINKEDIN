@@ -5,9 +5,9 @@ import{Search,Home,Users,BriefcaseBusiness,MessageSquareText,Bell,Grid3X3,} from
 
 export default function DesktopNavbar(){
     return (
-        <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-50">
+        <header className=" fixed top-0 left-0 w-full bg-white border-b border-gray-200 z-50">
+           {/* <div className="sticky top-20"> */}
            <div className="max-w-6xl mx-auto px-4">
-
 
             <div className="flex items-center justify-between h-14 ml-10">
                 <div className="flex items-center justify-between h-14 gap-8 ">
@@ -89,6 +89,7 @@ export default function DesktopNavbar(){
             </nav>
             </div>
            </div>
+           {/* </div> */}
         </header>
     )
 }

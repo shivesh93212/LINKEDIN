@@ -15,7 +15,7 @@ export default function Login(){
        const [error,setError]=useState("") 
 
         useEffect(()=>{
-          const token=localStorage.get("token")
+          const token=localStorage.getItem("token")
 
           if(token){
             navigate("/",{replace:true})
