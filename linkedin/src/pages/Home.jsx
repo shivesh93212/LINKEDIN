@@ -58,9 +58,9 @@ function Home() {
           </div>
 
           {/* CENTER FEED */}
-          <div className="md:col-span-6 space-y-4 py-14">
+          <div className="md:col-span-6 space-y-4 -mt-4 md:py-14">
             {/* CREATE POST BOX */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-4 hidden md:block">
               <div className="flex items-center gap-3">
                 <img
                   src="https://i.pravatar.cc/50"

@@ -12,7 +12,7 @@ export default function PostCard({ post, onDelete }) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className="bg-white rounded-xl border border-gray-200 p-4 md:mt-0">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
           <img
