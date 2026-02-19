@@ -12,11 +12,7 @@ export default function PostCard({ post, onDelete }) {
 
   };
 
-    const currentUserId = localStorage.getItem("user_id") // get logged in user
-
-console.log("Post user:", post.user_id);        // ✅ DEBUG
-console.log("Current user:", currentUserId);    // ✅ DEBUG
-
+    const currentUserId = localStorage.getItem("user_id") 
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 md:mt-0">
@@ -30,7 +26,7 @@ console.log("Current user:", currentUserId);    // ✅ DEBUG
 
           <div>
             <h3 className="font-semibold text-gray-900">
-              User {post.user_id}
+              {post.user.name}
             </h3>
 
             <p className="text-xs text-gray-400 mt-1">
@@ -39,7 +35,7 @@ console.log("Current user:", currentUserId);    // ✅ DEBUG
           </div>
         </div>
 
-        {String(post.user_id)===currentUserId &&(
+        {String(post.user.id)===currentUserId &&(
 
         <button
           onClick={handleDelete}
