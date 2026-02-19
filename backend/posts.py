@@ -123,3 +123,9 @@ def upload_post_image(
         "image_url":post.image_url
     }
 
+@router.get("/all",response_model=list[PostResponse])
+def all_posts(db:Session=Depends(get_db)):
+    posts=db.query(Post).filter(Post.is_deleted==False).order_by(Post.created_at.desc()).all()
+
+    return posts
+

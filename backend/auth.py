@@ -46,7 +46,7 @@ def login(data:OAuth2PasswordRequestForm = Depends(),db:Session=Depends(get_db))
     return {
         "access_token": token,
         "token_type": "bearer",
-        # "user_id": user_email.id,
+        "user_id": user_email.id
         # "name": user_email.name,
         # "email": user_email.email,
         # "role": user_email.role
