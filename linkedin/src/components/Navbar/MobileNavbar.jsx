@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useState} from "react";
 import { Link } from "react-router-dom";
 import {
   Home,
@@ -9,8 +9,12 @@ import {
   MessageSquareText,
   PlusSquare,
 } from "lucide-react";
+import CreatePostModel from "../Post/CreatePostModel";
+
+
 
 export default function MobileNavbar() {
+  const [isPostOpen,setIsPostOpen]=useState(false)
   return (
     <>
       {/* ✅ Mobile TOP HEADER */}
@@ -62,11 +66,21 @@ export default function MobileNavbar() {
             <span>My Network</span>
           </Link>
 
-          <Link to="/post" className="flex flex-col items-center text-[10px]">
+          <div> 
+          <button
+          onClick={()=>setIsPostOpen(true)}
+          className="flex flex-col items-center text-[10px]"
+          >
             <PlusSquare size={22} />
             <span>Post</span>
-          </Link>
-
+          </button>
+          <CreatePostModel
+          isOpen={isPostOpen}
+          onClose={()=>setIsPostOpen(false)}
+          onPostCreated={()=>window.location.reload()}
+          >
+          </CreatePostModel>
+         </div>
           <Link
             to="/notifications"
             className="relative flex flex-col items-center text-[10px]"

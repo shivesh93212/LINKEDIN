@@ -11,7 +11,7 @@ import Messages from "./pages/Messages"; // ✅ NEW
 import Network from "./pages/Network"; // ✅ NEW
 import Jobs from "./pages/Jobs"; // ✅ NEW
 import Notifications from "./pages/Notifications"; // ✅ NEW
-import Post from "./pages/Post"; // ✅ NEW
+
 
 function App() {
  
@@ -29,7 +29,7 @@ function App() {
     <Route path="/network" element={<ProtectedRoute><Network /></ProtectedRoute>} />    {/* ✅ NEW */}
     <Route path="/jobs" element={<ProtectedRoute><Jobs /></ProtectedRoute>} />          {/* ✅ NEW */}
     <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} /> {/* ✅ NEW */}
-    <Route path="/post" element={<ProtectedRoute><Post /></ProtectedRoute>} />          {/* ✅ NEW */}
+             
 
     <Route path="*" element={<h1 className="text-center mt-10">404 Page Not Found</h1>}/>
 
