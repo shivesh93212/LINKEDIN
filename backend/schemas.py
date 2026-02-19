@@ -16,7 +16,7 @@ class Token(BaseModel):
     access_token:str
     token_type:str="bearer"
     user_id:int
-    
+
 class ProfileCreate(BaseModel):
     name:str
     headline:str|None=None
@@ -47,13 +47,22 @@ class ConnectionResponse(BaseModel):
 class PostCreate(BaseModel):
     content:str
 
+class PostUser(BaseModel):
+   id:int
+   name:str
+
+   class Config:
+      from_attributes=True
+
+
 class PostResponse(BaseModel):
     id:int
-    user_id:int
     content:str
     image_url:str|None
     created_at:datetime
 
+    user:PostUser
+    
     class Config:
       from_attributes = True
 

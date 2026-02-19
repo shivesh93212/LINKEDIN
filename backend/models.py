@@ -14,7 +14,9 @@ class User(Base):
     password=Column(String)
     is_active=Column(Boolean,default=True)
     role=Column(String,default="user")
-
+    
+    posts=relationship("Post",back_populates="user")
+    
 class Profile(Base):
     __tablename__ = "profiles"
     id=Column(Integer,primary_key=True,index=True)
@@ -48,6 +50,8 @@ class Post(Base):
     image_url=Column(String,nullable=True)
     is_deleted = Column(Boolean, default=False)
     created_at=Column(DateTime(timezone=True),server_default=func.now())
+
+    user = relationship("User",back_populates="posts")
 
 class Like(Base):
     __tablename__="likes"
