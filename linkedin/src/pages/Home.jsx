@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import CreatePostModel from "../components/Post/CreatePostModel";
-import { getFeedPosts } from "../api/postApi";
+import { getAllPosts } from "../api/postApi";
 import PostCard from "../components/Post/PostCard";
 
 
@@ -11,7 +11,7 @@ function Home() {
 
   const fetchFeed = async () => {
     try {
-      const data = await getFeedPosts(1, 10);
+      const data = await getAllPosts();
       setPosts(data);
     } catch (err) {
       console.log("Feed error:", err);

@@ -9,7 +9,14 @@ export default function PostCard({ post, onDelete }) {
     } catch (err) {
       alert(err.response?.data?.detail || "Delete failed!");
     }
+
   };
+
+    const currentUserId = localStorage.getItem("user_id") // get logged in user
+
+console.log("Post user:", post.user_id);        // ✅ DEBUG
+console.log("Current user:", currentUserId);    // ✅ DEBUG
+
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 md:mt-0">
@@ -32,12 +39,15 @@ export default function PostCard({ post, onDelete }) {
           </div>
         </div>
 
+        {String(post.user_id)===currentUserId &&(
+
         <button
           onClick={handleDelete}
           className="text-sm text-red-600 font-semibold hover:underline"
         >
           Delete
         </button>
+        )}
       </div>
 
       <p className="mt-3 text-sm text-gray-800">{post.content}</p>

@@ -28,3 +28,8 @@ export const uploadPostImage = async (postId,file)=>{
 
     return response.data
 }
+
+export const getAllPosts=async ()=>{
+    const response=await axiosInstance.get("/posts/all");
+    return response.data
+}

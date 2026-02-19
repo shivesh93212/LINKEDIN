@@ -42,6 +42,8 @@ export default function Login(){
             }
 
             localStorage.setItem("token",data.access_token)
+            localStorage.setItem("user_id",data.user_id)
+            
             console.log("LOGIN SUCCESS, GOING HOME...");
             navigate("/",{replace:true})
         }
