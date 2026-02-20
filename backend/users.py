@@ -64,7 +64,7 @@ def get_user_profile(user_id:int,db:Session=Depends(get_db)):
 
 # image upload
 
-UPLOAD_DIR="uploads"
+UPLOAD_DIR="uploads/profile"
 os.makedirs(UPLOAD_DIR,exist_ok=True)
 
 @router.post("/profile/photo")
@@ -87,12 +87,16 @@ def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_curr
     if not profile:
         raise HTTPException(404,"Profile Not Found")
     
-    profile.profile_photo = file_path
+    profile.profile_photo = f"profile/{filename}"
 
     db.commit()
     db.refresh(profile)
 
     return{
         "message":"Profile photo uploaded",
-        "photo_url":f"/uploads/{filename}"
+        "photo_url": profile.profile_photo
     }
+
+@router.get("/me")
+def get_current_user_profile(current_user=Depends(get_current_user)):
+    return current_user

@@ -30,7 +30,8 @@ class ProfileResponse(BaseModel):
     id:int
     user_id:int
     name:str
-
+    profile_photo: str | None = None
+    
     class Config:
       from_attributes = True
 
