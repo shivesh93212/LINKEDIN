@@ -11,7 +11,7 @@ import Messages from "./pages/Messages"; // ✅ NEW
 import Network from "./pages/Network"; // ✅ NEW
 import Jobs from "./pages/Jobs"; // ✅ NEW
 import Notifications from "./pages/Notifications"; // ✅ NEW
-
+import { AuthProvider } from "./context/AuthContext"
 
 function App() {
  
@@ -19,6 +19,7 @@ function App() {
   return (
 
     <BrowserRouter>
+    <AuthProvider>
     <Routes> 
 
     <Route path="/" element={<ProtectedRoute> <Home/> </ProtectedRoute>} />
@@ -34,6 +35,7 @@ function App() {
     <Route path="*" element={<h1 className="text-center mt-10">404 Page Not Found</h1>}/>
 
     </Routes>
+    </AuthProvider>
     </BrowserRouter>
     
   )

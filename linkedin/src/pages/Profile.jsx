@@ -1,57 +1,78 @@
-import Rect,{useState} from "react"
-import Navbar from "../components/Navbar/Navbar"
-import {Settings,LogOut} from "lucide-react"
-import { logoutUser } from "../utils/auth"
+import React, { useEffect, useState } from "react";
+import { uploadProfilePhoto, getMyProfile } from "../api/profileApi";
+import { useAuth } from "../context/AuthContext";
 
-export default function Profile(){
-    const [isSettingsOpen,setIsSettingsOpen]=useState(false)
+export default function Profile() {
 
-    return (
-        <div className="min-h-screen bg-[#f3f2ef] pb-16 md:pb-0">
-            <Navbar/>
-            <div className="max-w-3xl mx-auto px-3 sm:px-6 mt-6">
-            {/* profile card */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                {/* cover photo */}
-                <div className="h-24 bg-gray-300"></div>
-                    <div className="flex flex-col items-center -mt-10 p-4">
-                    <img
-                    src="https://i.pravatar.cc/120"
-                    alt="profile"
-                    className="h-20 w-20 rounded-full border-4"
-                    />
-                    <h2 className="mt-2 text-lg font-semibold text-gray-900">
-                        Shivesh Patel
-                    </h2>
+  const { user, setUser } = useAuth();  
+  // Get global user + ability to update it
 
-                    <p className="text-sm text-gray-600 text-center mt-1">
-                        Full Stack Developer |DSA
-                    </p>
-                    </div>
+  const [preview, setPreview] = useState(null);  
+  // Temporary image preview before upload
 
-                    <div className="border-t border-gray-200 p-4">
-                        <button
-                        onClick={()=>setIsSettingsOpen(!isSettingsOpen)}
-                        className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100"
-                        >
-                            <div className="flex items-center gap-2 text-gray-700 font-medium">
-                                <Settings size={18}/>
-                                Settings
-                            </div>
-                        </button>
-                        {isSettingsOpen && (
-                            <button
-                            onClick={logoutUser}
-                            className="mt-2 w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 font-semibold hover:bg-red-50"
-                            >
-                                <LogOut size={18}/>
-                                Logout
-                            </button>
-                        )}
-                    </div>
-                
-            </div>
-        </div>
-        </div>
-    )
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getMyProfile();
+      setUser(data);  
+      // Make sure context updated
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handlePhotoChange = async (e) => {
+
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Show instant preview
+    setPreview(URL.createObjectURL(file));
+
+    try {
+      const res = await uploadProfilePhoto(file);
+
+      // Update global user state with new photo
+      setUser((prev) => ({
+        ...prev,
+        profile_photo: res.photo_url
+      }));
+
+    } catch (err) {
+      alert("Upload failed");
+    }
+    console.log("USER AFTER REFRESH:", user);
+  };
+
+  return (
+    <div className="p-6">
+
+      <label className="cursor-pointer relative">
+
+      <img
+  src={
+    preview
+      ? preview
+      : user?.profile_photo
+      ? `http://127.0.0.1:8000/${user.profile_photo}`
+      : "http://127.0.0.1:8000/uploads/profile/dummy_image.png"
+  }
+  alt="profile"
+  className="w-32 h-32 rounded-full object-cover"
+/>
+
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handlePhotoChange}
+        />
+
+      </label>
+
+      <h2 className="mt-4 text-xl font-semibold">
+        {user?.name || "Your Name"}
+      </h2>
+
+    </div>
+  );
 }

@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 import CreatePostModel from "../components/Post/CreatePostModel";
 import { getAllPosts } from "../api/postApi";
 import PostCard from "../components/Post/PostCard";
-
+import { getProfileImage } from "../config";
 
 function Home() {
   const [isPostModelOpen, setIsPostModelOpen] = useState(false);
@@ -40,7 +40,7 @@ function Home() {
 
               <div className="flex flex-col items-center -mt-7 p-4">
                 <img
-                  src="https://i.pravatar.cc/100"
+                  src={getProfileImage(user?.profile_photo)}
                   alt="profile"
                   className="w-16 h-16 rounded-full border-2 border-white"
                 />
