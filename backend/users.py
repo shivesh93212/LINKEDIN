@@ -46,7 +46,13 @@ def get_my_profile(current_user=Depends(get_current_user),db:Session=Depends(get
     profile=db.query(Profile).filter(Profile.user_id==current_user.id).first()
 
     if not profile:
-        raise HTTPException(404,"Profile Not Found")
+        profile = Profile(
+            user_id=current_user.id,
+            name=current_user.name  
+        )
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
     
     return profile
 
@@ -87,7 +93,7 @@ def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_curr
     if not profile:
         raise HTTPException(404,"Profile Not Found")
     
-    profile.profile_photo = f"profile/{filename}"
+    profile.profile_photo = f"uploads/profile/{filename}"
 
     db.commit()
     db.refresh(profile)

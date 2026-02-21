@@ -5,6 +5,7 @@ from datetime import datetime
 from sqlalchemy.sql import func
 
 
+
 class User(Base):
     __tablename__="users"
 
@@ -28,7 +29,7 @@ class Profile(Base):
     experience=Column(String)
     education=Column(String)
     location=Column(String)
-    profile_photo=Column(String)
+    profile_photo=Column(String,default="uploads/profile/dummy_image.png")
 
     user = relationship("User", backref="profile")
 
