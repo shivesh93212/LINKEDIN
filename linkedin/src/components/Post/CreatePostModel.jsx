@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { X, Image, Video, Calendar, FileText } from "lucide-react";
 import { createPost,uploadPostImage } from "../../api/postApi";
+import { getProfileImage } from "../../config";
+import { useAuth } from "../../context/AuthContext";
 
 export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
+  const {user}=useAuth()
+  
   const [content, setContent] = useState("");
   const [selectedImage,setSelectedImage]=useState("")
 
@@ -90,7 +94,7 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
         {/* USER INFO */}
         <div className="flex items-center gap-3 px-4 py-4">
-          <img src="https://i.pravatar.cc/60" alt="profile" 
+          <img src={getProfileImage(user?.profile_photo)} alt="profile" 
           className= "w-12 h-12 rounded-full object-cover"
           />
 

@@ -4,8 +4,12 @@ import CreatePostModel from "../components/Post/CreatePostModel";
 import { getAllPosts } from "../api/postApi";
 import PostCard from "../components/Post/PostCard";
 import { getProfileImage } from "../config";
+import { useAuth } from "../context/AuthContext";
 
 function Home() {
+
+  const {user}=useAuth()
+
   const [isPostModelOpen, setIsPostModelOpen] = useState(false);
   const [posts, setPosts] = useState([]);
 
@@ -63,7 +67,7 @@ function Home() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 hidden md:block">
               <div className="flex items-center gap-3">
                 <img
-                  src="https://i.pravatar.cc/50"
+                  src={getProfileImage(user?.profile_photo)}
                   alt="profile"
                   className="w-12 h-12 rounded-full"
                 />

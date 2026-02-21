@@ -14,8 +14,14 @@ import {
 } from "lucide-react";
 
 import { logoutUser } from "../../utils/auth";
+import { getProfileImage } from "../../config";
+import { useAuth } from "../../context/AuthContext";
+
 
 export default function DesktopNavbar() {
+
+  const {user}=useAuth()
+  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // dropdown open/close state
   const [isSettingsOpen, setIsSettingsOpen] = useState(false); // settings open/close state
 
@@ -120,7 +126,7 @@ export default function DesktopNavbar() {
                 className="flex flex-col items-center text-xs hover:text-black" 
               >
                 <img
-                  src="https://i.pravatar.cc/40"
+                  src={getProfileImage(user?.profile_photo)}
                   alt="profile"
                   className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9 rounded-full"
 

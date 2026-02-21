@@ -1,7 +1,14 @@
 import React from "react";
 import { deletePost } from "../../api/postApi";
+import { getProfileImage } from "../../config";
+import { useAuth } from "../../context/AuthContext";
+
+
 
 export default function PostCard({ post, onDelete }) {
+
+  const {user}=useAuth()
+  
   const handleDelete = async () => {
     try {
       await deletePost(post.id);
@@ -19,7 +26,7 @@ export default function PostCard({ post, onDelete }) {
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
           <img
-            src="https://i.pravatar.cc/50"
+            src={getProfileImage(user?.profile_photo)}
             alt="user"
             className="w-12 h-12 rounded-full"
           />

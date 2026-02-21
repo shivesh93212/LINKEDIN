@@ -10,10 +10,11 @@ import {
   PlusSquare,
 } from "lucide-react";
 import CreatePostModel from "../Post/CreatePostModel";
-
-
+import { useAuth } from "../../context/AuthContext";
+import { getProfileImage } from "../../config";
 
 export default function MobileNavbar() {
+  const {user}=useAuth()
   const [isPostOpen,setIsPostOpen]=useState(false)
   return (
     <>
@@ -26,7 +27,7 @@ export default function MobileNavbar() {
           <Link to="/profile">
             {/* ✅ FIXED: profile click -> profile page */}
             <img
-              src="https://i.pravatar.cc/40"
+              src={getProfileImage(user?.profile_photo)}
               alt="profile"
               className="w-9 h-9 rounded-full border border-gray-500"
             />
