@@ -3,10 +3,14 @@ import { uploadProfilePhoto, getMyProfile } from "../api/profileApi";
 import { getAllPosts } from "../api/postApi";
 import { useAuth } from "../context/AuthContext";
 import { Settings, Pencil } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PostCard from "../components/Post/PostCard";
+import ConnectionButton from "../components/ConnectionButton";
 
 export default function Profile() {
+
+  const { id } = useParams();              // ✅ route param
+  const profileUserId = id ? Number(id) : null;   // ✅ define properly
 
   const { user, setUser, logout } = useAuth();
   const [preview, setPreview] = useState(null);
@@ -20,7 +24,6 @@ export default function Profile() {
     navigate("/login");
   };
 
-  // ✅ Load profile + posts together
   useEffect(() => {
     const loadProfileAndPosts = async () => {
       try {
@@ -88,7 +91,6 @@ export default function Profile() {
               className="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white object-cover shadow-lg"
             />
 
-            {/* Pencil Button */}
             <button
               onClick={() => fileInputRef.current.click()}
               className="absolute bottom-2 -right-3 bg-white p-2 rounded-full shadow hover:bg-gray-200 transition"
@@ -113,9 +115,22 @@ export default function Profile() {
         {/* PROFILE CARD */}
         <div className="bg-white rounded-lg shadow p-6">
 
-          <h2 className="text-3xl font-bold">
-            {user?.name || "Your Name"}
-          </h2>
+          <div className="flex items-center justify-between">
+
+            <h2 className="text-3xl font-bold">
+              {user?.name}
+            </h2>
+
+            {/* ✅ Button show only if profileUserId exists AND not own profile */}
+            {profileUserId && profileUserId !== user?.id && (
+              <ConnectionButton profileUserId={profileUserId} />
+            )}
+
+          </div>
+
+          <p className="text-blue-600 font-medium mt-2">
+            {user?.followers_count ?? 0} followers
+          </p>
 
           <p className="text-gray-700 mt-2">
             Full-Stack Developer | High-Performance Backend Dev | DSA |
@@ -134,52 +149,9 @@ export default function Profile() {
           </p>
 
           <p className="text-blue-600 font-medium mt-2">
-            500+ connections
+            {user?.followers_count ?? 0} connections
           </p>
 
-        </div>
-
-        {/* ANALYTICS */}
-        <div className="bg-white rounded-lg shadow p-6 mt-6">
-
-          <h3 className="text-xl font-semibold mb-2">
-            Analytics
-          </h3>
-
-          <p className="text-gray-500 text-sm mb-4">
-            Private to you
-          </p>
-
-          <div className="space-y-6">
-
-            <div>
-              <p className="font-semibold text-lg">
-                73 profile views
-              </p>
-              <p className="text-gray-500 text-sm">
-                Discover who's viewed your profile.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-lg">
-                34 post impressions
-              </p>
-              <p className="text-gray-500 text-sm">
-                Check out who's engaging with your posts.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-semibold text-lg">
-                20 search appearances
-              </p>
-              <p className="text-gray-500 text-sm">
-                See how often you appear in search results.
-              </p>
-            </div>
-
-          </div>
         </div>
 
         {/* ACTIVITY */}
@@ -200,18 +172,8 @@ export default function Profile() {
               </button>
             </div>
 
-            <div className="flex gap-3 mt-4">
-              <button className="bg-green-700 text-white px-4 py-1 rounded-full text-sm">
-                Posts
-              </button>
-              <button className="border px-4 py-1 rounded-full text-sm">
-                More
-              </button>
-            </div>
-
           </div>
 
-          {/* POSTS LIST */}
           <div className="mt-6 space-y-4">
             {posts.length === 0 ? (
               <p className="text-gray-500 text-sm">
