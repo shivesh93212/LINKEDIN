@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,HTTPException,UploadFile,File
 from database import get_db
-from models import Profile
+from models import Profile,Connection
 from schemas import ProfileCreate,ProfileResponse
 from dependencies import get_current_user
 from sqlalchemy.orm import Session
@@ -104,5 +104,25 @@ def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_curr
     }
 
 @router.get("/me")
-def get_current_user_profile(current_user=Depends(get_current_user)):
-    return current_user
+def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+    profile=db.query(Profile).filter(
+        Profile.user_id==current_user.id
+    ).first()
+
+    followers_count=db.query(Connection).filter(
+        Connection.receiver_id_id==current_user.id,
+        Connection.status=="accepted"
+    ).count()
+    following_count=db.query(Connection).filter(
+        Connection.sender_id==current_user.id,
+        Connection.status=="acceptd"
+    ).count()
+
+    return {
+        "id": current_user.id,
+        "name": current_user.name,
+        "email": current_user.email,
+        "profile_photo": profile.profile_photo if profile else None,
+        "followers_count": followers_count,
+        "following_count": following_count
+    }

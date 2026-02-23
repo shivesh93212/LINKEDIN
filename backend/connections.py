@@ -115,3 +115,42 @@ def my_connection(current_user=Depends(get_current_user),db:Session=Depends(get_
         ),
         Connection.status == "accepted"
     ).all()
+
+
+@router.get("/status/{user_id}")
+def get_status(user_id: int,
+               current_user=Depends(get_current_user),
+               db: Session = Depends(get_db)):
+
+    connection = db.query(Connection).filter(
+        (
+            (Connection.sender_id == current_user.id) &
+            (Connection.receiver_id == user_id)
+        ) |
+        (
+            (Connection.sender_id == user_id) &
+            (Connection.receiver_id == current_user.id)
+        )
+    ).first()
+
+    if not connection:
+        return {"status": "none"}
+
+    # If current user sent request
+    if connection.sender_id == current_user.id and connection.status == "pending":
+        return {"status": "pending", "request_id": connection.id}
+
+    # If current user received request
+    if connection.receiver_id == current_user.id and connection.status == "pending":
+        return {"status": "received", "request_id": connection.id}
+
+    return {"status": connection.status}
+
+
+@router.get("/user/{user_id}")
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(404, "User not found")
+
+    return user
