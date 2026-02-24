@@ -6,6 +6,7 @@ import { Settings, Pencil } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import PostCard from "../components/Post/PostCard";
 import ConnectionButton from "../components/ConnectionButton";
+import CreatePostModel from "../components/Post/CreatePostModel";
 
 export default function Profile() {
 
@@ -16,6 +17,9 @@ export default function Profile() {
   const [preview, setPreview] = useState(null);
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
+
+  const [isPostModel,setIsPostModel]=useState(false)
+
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -167,7 +171,9 @@ export default function Profile() {
                 </p>
               </div>
 
-              <button className="border border-blue-600 text-blue-600 px-4 py-1 rounded-full text-sm hover:bg-blue-50">
+              <button
+              onClick={()=>setIsPostModel(true)}
+               className="border border-blue-600 text-blue-600 px-4 py-1 rounded-full text-sm hover:bg-blue-50">
                 Create a post
               </button>
             </div>
@@ -217,7 +223,11 @@ export default function Profile() {
         </div>
 
       </div>
-
+     <CreatePostModel
+      isOpen={isPostModel}
+      onClose={()=>setIsPostModel(false)}
+      
+     />
     </div>
   );
 }
