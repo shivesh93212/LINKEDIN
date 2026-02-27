@@ -1,26 +1,13 @@
 import axiosInstance from "./axiosInstance";
 
-/*
-========================================
-GET MY PROFILE
-========================================
-Calls: GET /users/profile
-Returns: logged in user profile data
-*/
 
 export const getMyProfile = async () => {
-  const response = await axiosInstance.get("/users/profile");
+  const response = await axiosInstance.get("/users/me");
 
   return response.data;
 };
 
-/*
-========================================
-UPDATE PROFILE
-========================================
-Calls: POST /users/profile
-Body: profile fields (name, headline, etc.)
-*/
+
 
 
 

@@ -7,13 +7,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import PostCard from "../components/Post/PostCard";
 import ConnectionButton from "../components/ConnectionButton";
 import CreatePostModel from "../components/Post/CreatePostModel";
+import { getUserProfile } from "../api/profileApi";
+
 
 export default function Profile() {
 
   const { id } = useParams();              // ✅ route param
   const profileUserId = id ? Number(id) : null;   // ✅ define properly
 
-  const { user, setUser, logout } = useAuth();
+  const { user: loggedInUser, logout } = useAuth();
+  const [profileUser, setProfileUser] = useState(null);
   const [preview, setPreview] = useState(null);
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -23,38 +26,55 @@ export default function Profile() {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
+
+  const isOwnProfile =
+  !profileUserId || profileUserId === loggedInUser?.id;
+
+
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  useEffect(() => {
-    const loadProfileAndPosts = async () => {
-      try {
-        const profileData = await getMyProfile();
-        setUser(profileData);
+useEffect(() => {
+  if (!loggedInUser) return;  // wait until auth loads
 
-        const response = await getAllPosts();
+  const loadProfileAndPosts = async () => {
+    try {
+      let data;
 
-        if (!response || !Array.isArray(response)) {
-          setPosts([]);
-          return;
-        }
+      const isOwn =
+        !profileUserId || profileUserId === loggedInUser.id;
 
-        const myPosts = response.filter(
-          (post) => post.user?.id === profileData.id
-        );
-
-        setPosts(myPosts);
-
-      } catch (err) {
-        console.log("Error loading profile or posts:", err);
-        setPosts([]);
+      if (isOwn) {
+        data = await getMyProfile();
+      } else {
+        data = await getUserProfile(profileUserId);
       }
-    };
 
-    loadProfileAndPosts();
-  }, []);
+      setProfileUser(data);
+
+      const response = await getAllPosts();
+
+      if (!response || !Array.isArray(response)) {
+        setPosts([]);
+        return;
+      }
+
+      const userPosts = response.filter(
+        (post) => post.user?.id === data.id
+      );
+
+      setPosts(userPosts);
+
+    } catch (err) {
+      console.log("Error loading profile:", err);
+      setPosts([]);
+    }
+  };
+
+  loadProfileAndPosts();
+}, [profileUserId, loggedInUser]);
 
   const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
@@ -64,7 +84,7 @@ export default function Profile() {
 
     try {
       const res = await uploadProfilePhoto(file);
-      setUser((prev) => ({
+      setProfileUser((prev) => ({
         ...prev,
         profile_photo: res.photo_url,
       }));
@@ -72,6 +92,9 @@ export default function Profile() {
       alert("Upload failed");
     }
   };
+    
+ 
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,9 +110,9 @@ export default function Profile() {
               src={
                 preview
                   ? preview
-                  : user?.profile_photo
-                  ? `http://127.0.0.1:8000/${user.profile_photo}`
-                  : "http://127.0.0.1:8000/uploads/profile/dummy_image.png"
+                  : profileUser?.profile_photo
+                  ? `http://localhost:8000/${profileUser.profile_photo}`
+                  : "http://localhost:8000/uploads/profile/dummy_image.png"
               }
               alt="profile"
               className="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white object-cover shadow-lg"
@@ -122,18 +145,18 @@ export default function Profile() {
           <div className="flex items-center justify-between">
 
             <h2 className="text-3xl font-bold">
-              {user?.name}
+              {profileUser?.name}
             </h2>
 
             {/* ✅ Button show only if profileUserId exists AND not own profile */}
-            {profileUserId && profileUserId !== user?.id && (
-              <ConnectionButton profileUserId={profileUserId} />
+           {!isOwnProfile && (
+            <ConnectionButton profileUserId={profileUserId} />
             )}
 
           </div>
 
           <p className="text-blue-600 font-medium mt-2">
-            {user?.followers_count ?? 0} followers
+            {profileUser?.followers_count ?? 0} followers
           </p>
 
           <p className="text-gray-700 mt-2">
@@ -153,7 +176,7 @@ export default function Profile() {
           </p>
 
           <p className="text-blue-600 font-medium mt-2">
-            {user?.followers_count ?? 0} connections
+            {profileUser?.followers_count ?? 0} connections
           </p>
 
         </div>

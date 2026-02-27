@@ -24,6 +24,14 @@ function App() {
 
     <Route path="/" element={<ProtectedRoute> <Home/> </ProtectedRoute>} />
     <Route path="/login" element={<Login/>}/>
+    <Route 
+  path="/profile/:id" 
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  } 
+/>
     <Route path="/register" element={<Register/>}/>
     <Route path="/profile" element={<ProtectedRoute> <Profile/> </ProtectedRoute>}/>
     <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />  {/* ✅ NEW */}
