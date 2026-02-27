@@ -11,64 +11,55 @@ router=APIRouter(prefix="/likes",tags=["likes"])
 
 # like post
 
-@router.post("/{post_id}",response_model=LikeResponse)
-def like_post(post_id:int,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
-    post=db.query(Post).filter(Post.id==post_id).first()
+@router.post("/{post_id}")
+def toggle_like(
+    post_id: int,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):  
+    print("CURRENT USER:", current_user)
+    post = db.query(Post).filter(Post.id == post_id).first()
 
     if not post:
-        raise HTTPException(404,"Post not found")
-    
-    existing=db.query(Like).filter(
-        Like.user_id==current_user.id,
-        Like.post_id==post_id
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    existing = db.query(Like).filter(
+        Like.user_id == current_user.id,
+        Like.post_id == post_id
     ).first()
-    
+ 
+    # 🔹 If already liked → Unlike
     if existing:
-        raise HTTPException(400,"Post already liked")
-    
-    like=Like(
+        db.delete(existing)
+        db.commit()
+        return {
+            "liked": False,
+            "message": "Post unliked"
+        }
+
+    # 🔹 If not liked → Like
+    like = Like(
         user_id=current_user.id,
         post_id=post_id
     )
-
     db.add(like)
     db.commit()
-    db.refresh(like)
 
-# like notification 
-
+    # 🔔 Notification
     if post.user_id != current_user.id:
-            create_notification(
-                db=db,
-                user_id=post.user_id,
-                actor_id=current_user.id,
-                type="like",
-                reference_id=post.id
-            )
+        create_notification(
+            db=db,
+            user_id=post.user_id,
+            actor_id=current_user.id,
+            type="like",
+            reference_id=post.id
+        )
 
-    return {"message": "Post liked"}
+    return {
+        "liked": True,
+        "message": "Post liked"
+    }
 
-# unlike post
-
-@router.post("/{post_id}")
-def unlike_post(post_id:int,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
-    post=db.query(Post).filter(Post.id==post_id).first()
-
-    if not post:
-        raise HTTPException(404,"Post not found")
-    
-    like=db.query(Like).filter(
-        Like.user_id==current_user.id,
-        Like.post_id==post_id
-    ).first()
-
-    if not like:
-        raise HTTPException(404,"Already Unlike Post")
-    
-    db.delete(like)
-    db.commit()
-
-    return {"message":"Post Unliked"}
 
 # like count
 
@@ -78,5 +69,18 @@ def like_count(post_id:int,db:Session=Depends(get_db)):
         "post_id":post_id,
         "likes":db.query(Like).filter(Like.post_id==post_id).count()
     }
+
+@router.get("/status/{post_id}")
+def like_status(
+    post_id: int,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    like = db.query(Like).filter(
+        Like.user_id == current_user.id,
+        Like.post_id == post_id
+    ).first()
+
+    return {"liked": bool(like)}
 
 
