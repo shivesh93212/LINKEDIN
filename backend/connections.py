@@ -12,44 +12,53 @@ router=APIRouter(prefix="/connections",tags=["connections"])
 
 # send connection request
 
-@router.post("/send/{user_id}",response_model=ConnectionResponse)
-def send_request(user_id:int,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
-    if user_id==current_user.id:
-        raise HTTPException(400,"You cannot connect with yourself")
-    
-    receiver=db.query(User).filter(User.id==user_id).first()
+@router.post("/send/{user_id}", response_model=ConnectionResponse)
+def send_request(
+    user_id: int,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
+):   
+    print("CURRENT USER:", current_user.id)
+    print("TARGET USER:", user_id)
+    if user_id == current_user.id:
+        raise HTTPException(400, "You cannot connect with yourself")
 
+    receiver = db.query(User).filter(User.id == user_id).first()
     if not receiver:
-        raise HTTPException(404,"User not Found")
-    
-    existing=db.query(Connection).filter(
-        ((Connection.sender_id==current_user.id)&
-         (Connection.receiver_id==user_id))|
-         ((Connection.sender_id==user_id)&
-          (Connection.receiver_id==current_user.id))
+        raise HTTPException(404, "User not found")
+
+    existing = db.query(Connection).filter(
+        ((Connection.sender_id == current_user.id) &
+         (Connection.receiver_id == user_id)) |
+        ((Connection.sender_id == user_id) &
+         (Connection.receiver_id == current_user.id))
     ).first()
 
+    print("EXISTING:", existing)
+
     if existing:
-        raise HTTPException(400,"Connection request already exists")
-    
-    connection =Connection(
+        if existing.status == "pending":
+            raise HTTPException(400, "Request already pending")
+
+        if existing.status == "accepted":
+            raise HTTPException(400, "Already connected")
+
+        if existing.status == "rejected":
+            # Allow resend by deleting old rejected record
+            db.delete(existing)
+            db.commit()
+
+    connection = Connection(
         sender_id=current_user.id,
-        receiver_id=user_id
+        receiver_id=user_id,
+        status="pending"
     )
 
     db.add(connection)
     db.commit()
     db.refresh(connection)
 
-    create_notification(
-        db=db,
-        user_id=user_id,                 # receiver
-        actor_id=current_user.id,        # sender
-        type="connection_request",
-        reference_id=connection.id
-    )
-
-    return {"message": "Connection request sent"}
+    return connection
 
 
 # accept request

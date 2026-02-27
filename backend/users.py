@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,HTTPException,UploadFile,File
 from database import get_db
-from models import Profile,Connection
+from models import Profile,Connection,User
 from schemas import ProfileCreate,ProfileResponse
 from dependencies import get_current_user
 from sqlalchemy.orm import Session
@@ -13,6 +13,32 @@ import os
 router=APIRouter(prefix="/users",tags=["users"])
 
 # create profile and update
+
+
+@router.get("/me")
+def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+    profile=db.query(Profile).filter(
+        Profile.user_id==current_user.id
+    ).first()
+
+    followers_count=db.query(Connection).filter(
+        Connection.receiver_id==current_user.id,
+        Connection.status=="accepted"
+    ).count()
+    following_count=db.query(Connection).filter(
+        Connection.sender_id==current_user.id,
+        Connection.status=="accepted"
+    ).count()
+
+    return {
+        "id": current_user.id,
+        "name": current_user.name,
+        "email": current_user.email,
+        "profile_photo": profile.profile_photo if profile else None,
+        "followers_count": followers_count,
+        "following_count": following_count
+    }
+
 
 @router.post("/profile",response_model=ProfileResponse)
 def create_update_profile(data:ProfileCreate,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
@@ -58,15 +84,35 @@ def get_my_profile(current_user=Depends(get_current_user),db:Session=Depends(get
 
 # get user profile basis of user_id
 
-@router.get("/{user_id}",response_model=ProfileResponse)
-def get_user_profile(user_id:int,db:Session=Depends(get_db)):
-    
-    profile=db.query(Profile).filter(Profile.user_id==user_id).first()
 
-    if not profile:
-        raise HTTPException(404,"Profile Not Found")
-    
-    return profile
+
+@router.get("/{user_id}")
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+
+    profile = db.query(Profile).filter(Profile.user_id == user_id).first()
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(404, "User not found")
+
+    followers_count = db.query(Connection).filter(
+        Connection.receiver_id == user_id,
+        Connection.status == "accepted"
+    ).count()
+
+    following_count = db.query(Connection).filter(
+        Connection.sender_id == user_id,
+        Connection.status == "accepted"
+    ).count()
+
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "profile_photo": profile.profile_photo if profile else None,
+        "followers_count": followers_count,
+        "following_count": following_count
+    }
 
 # image upload
 
@@ -103,26 +149,3 @@ def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_curr
         "photo_url": profile.profile_photo
     }
 
-@router.get("/me")
-def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(get_current_user)):
-    profile=db.query(Profile).filter(
-        Profile.user_id==current_user.id
-    ).first()
-
-    followers_count=db.query(Connection).filter(
-        Connection.receiver_id_id==current_user.id,
-        Connection.status=="accepted"
-    ).count()
-    following_count=db.query(Connection).filter(
-        Connection.sender_id==current_user.id,
-        Connection.status=="acceptd"
-    ).count()
-
-    return {
-        "id": current_user.id,
-        "name": current_user.name,
-        "email": current_user.email,
-        "profile_photo": profile.profile_photo if profile else None,
-        "followers_count": followers_count,
-        "following_count": following_count
-    }
