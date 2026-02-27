@@ -2,7 +2,7 @@ import React from "react";
 import { deletePost } from "../../api/postApi";
 import { getProfileImage } from "../../config";
 import { useAuth } from "../../context/AuthContext";
-
+import LikeButton from "../LikeButton"
 
 
 export default function PostCard({ post, onDelete }) {
@@ -66,7 +66,7 @@ export default function PostCard({ post, onDelete }) {
       )}
 
       <div className="flex justify-between mt-3 text-sm text-gray-600">
-        <button className="hover:text-blue-600">👍 Like</button>
+        <LikeButton postId={post.id} />
         <button className="hover:text-blue-600">💬 Comment</button>
         <button className="hover:text-blue-600">🔁 Repost</button>
         <button className="hover:text-blue-600">📤 Send</button>
