@@ -51,6 +51,7 @@ class PostCreate(BaseModel):
 class PostUser(BaseModel):
    id:int
    name:str
+   profile_photo:str | None=None
 
    class Config:
       from_attributes=True
@@ -61,6 +62,7 @@ class PostResponse(BaseModel):
     content:str
     image_url:str|None
     created_at:datetime
+    user:PostUser
 
     user:PostUser
     

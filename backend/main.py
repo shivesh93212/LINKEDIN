@@ -37,13 +37,13 @@ Base.metadata.create_all(bind=engine)
 def home():
     return {"message":"BACKEND START"}
 
-@app.get("/users/me")
-def get_me(current_user=Depends(get_current_user)):
-    return {
-        "id":current_user.id,
-        "email":current_user.email,
-        "is_active":current_user.is_active
-    }
+# @app.get("/users/me")
+# def get_me(current_user=Depends(get_current_user)):
+#     return {
+#         "id":current_user.id,
+#         "email":current_user.email,
+#         "is_active":current_user.is_active
+#     }
 
 app.mount("/uploads",StaticFiles(directory="uploads"),name="uploads")
 

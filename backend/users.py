@@ -21,6 +21,8 @@ def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(ge
         Profile.user_id==current_user.id
     ).first()
 
+    
+
     followers_count=db.query(Connection).filter(
         Connection.receiver_id==current_user.id,
         Connection.status=="accepted"

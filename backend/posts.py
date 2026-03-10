@@ -1,7 +1,7 @@
 from fastapi import APIRouter,Depends,HTTPException,UploadFile,File,Query
 from database import get_db
 from schemas import PostResponse,PostCreate
-from models import Post,Connection
+from models import Post,Connection,Profile
 from dependencies import get_current_user
 from sqlalchemy.orm import Session
 import os
@@ -62,12 +62,35 @@ def feed(page:int=Query(1,ge=1),limit:int=Query(10,le=50),current_user=Depends(g
 
     user_ids=connection_ids+[current_user.id]
 
-    return db.query(Post).filter(
-        Post.user_id.in_(user_ids)
+    posts = db.query(Post).filter(
+        Post.user_id.in_(user_ids),
+        Post.is_deleted == False
     ).order_by(Post.created_at.desc())\
      .limit(limit)\
      .offset(offset)\
      .all()
+
+    result = []
+
+    for post in posts:
+
+        profile = db.query(Profile).filter(
+            Profile.user_id == post.user_id
+        ).first()
+
+        result.append({
+            "id": post.id,
+            "content": post.content,
+            "image_url": post.image_url,
+            "created_at": post.created_at,
+            "user": {
+                "id": post.user.id,
+                "name": post.user.name,
+                "profile_photo": profile.profile_photo if profile else None
+            }
+        })
+
+    return result
 
 
 
@@ -123,9 +146,32 @@ def upload_post_image(
         "image_url":post.image_url
     }
 
-@router.get("/all",response_model=list[PostResponse])
-def all_posts(db:Session=Depends(get_db)):
-    posts=db.query(Post).filter(Post.is_deleted==False).order_by(Post.created_at.desc()).all()
+@router.get("/all", response_model=list[PostResponse])
+def all_posts(db: Session = Depends(get_db)):
 
-    return posts
+    posts = db.query(Post).filter(
+        Post.is_deleted == False
+    ).order_by(Post.created_at.desc()).all()
+
+    result = []
+
+    for post in posts:
+
+        profile = db.query(Profile).filter(
+            Profile.user_id == post.user_id
+        ).first()
+
+        result.append({
+            "id": post.id,
+            "content": post.content,
+            "image_url": post.image_url,
+            "created_at": post.created_at,
+            "user": {
+                "id": post.user.id,
+                "name": post.user.name,
+                "profile_photo": profile.profile_photo if profile else None
+            }
+        })
+
+    return result
 
