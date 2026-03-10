@@ -25,8 +25,9 @@ export default function PostCard({ post, onDelete }) {
     <div className="bg-white rounded-xl border border-gray-200 p-4 md:mt-0">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
+          
           <img
-            src={getProfileImage(user?.profile_photo)}
+            src={getProfileImage(post.user?.profile_photo)}
             alt="user"
             className="w-12 h-12 rounded-full"
           />
@@ -67,9 +68,9 @@ export default function PostCard({ post, onDelete }) {
 
       <div className="flex justify-between mt-3 text-sm text-gray-600">
         <LikeButton postId={post.id} />
-        <button className="hover:text-blue-600">💬 Comment</button>
-        <button className="hover:text-blue-600">🔁 Repost</button>
-        <button className="hover:text-blue-600">📤 Send</button>
+        <button className="hover:text-blue-600">Comment</button>
+        <button className="hover:text-blue-600">Repost</button>
+        <button className="hover:text-blue-600">Send</button>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import { getProfileImage } from "../config";
 import { useAuth } from "../context/AuthContext";
 
 function Home() {
-
+ 
   const {user}=useAuth()
 
   const [isPostModelOpen, setIsPostModelOpen] = useState(false);

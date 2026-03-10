@@ -48,10 +48,11 @@ useEffect(() => {
 
       if (isOwn) {
         data = await getMyProfile();
+        // console.log("PROFILE DATA:", data);
       } else {
         data = await getUserProfile(profileUserId);
       }
-
+      // console.log("PROFILE DATA:", data);
       setProfileUser(data);
 
       const response = await getAllPosts();
@@ -83,18 +84,16 @@ useEffect(() => {
     setPreview(URL.createObjectURL(file));
 
     try {
-      const res = await uploadProfilePhoto(file);
-      setProfileUser((prev) => ({
-        ...prev,
-        profile_photo: res.photo_url,
-      }));
-    } catch {
+       await uploadProfilePhoto(file);
+       const updatedProfile=await getMyProfile()
+       setProfileUser(updatedProfile)
+    } 
+    
+    catch {
       alert("Upload failed");
     }
   };
     
- 
-
 
   return (
     <div className="min-h-screen bg-gray-50">
