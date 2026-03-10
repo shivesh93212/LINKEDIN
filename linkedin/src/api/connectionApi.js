@@ -40,4 +40,18 @@ export const rejectConnection = async ()=>{
 
 export const getConnectionStatus = async ()=>{
     const data = await axiosInstance.get(`/connections/status/${userId}`)
+    
+}
+
+// pending status
+
+export const getRequests = ()=>{
+    return axiosInstance.get(`/connections/requests`);
+
+}
+
+// my connections
+
+export const getConnections = ()=>{
+    return axiosInstance.get(`/connections/me`);
 }

@@ -56,12 +56,12 @@ export default function LikeButton({ postId }) {
         }`}
     >
       <ThumbsUp
-        size={18}
+        size={14}
         className={`transition-transform duration-200 ${
           liked ? "fill-blue-600 scale-110" : ""
         }`}
       />
-      <span>Like</span>
+      {/* <span>Like</span> */}
       {count > 0 && <span className="text-xs">({count})</span>}
     </button>
   );
