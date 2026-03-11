@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useState,useEffect,useRef}from "react";
 import { deletePost } from "../../api/postApi";
 import { getProfileImage } from "../../config";
 import { useAuth } from "../../context/AuthContext";
@@ -8,11 +8,30 @@ import LikeButton from "../LikeButton"
 export default function PostCard({ post, onDelete }) {
 
   const {user}=useAuth()
-  
+  const [open,setOpen]=useState(false)
+  const menuRef=useRef()
+
+  useEffect(()=>{
+    const handleClickOutside=(event)=>{
+      if(menuRef.current && !menuRef.current.contains(event.target)){
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown",handleClickOutside)
+
+    return ()=>{
+      document.removeEventListener("mousedown",handleClickOutside)
+    }
+  },[])
+
+
   const handleDelete = async () => {
+   
     try {
       await deletePost(post.id);
+      
       onDelete(post.id);
+      
     } catch (err) {
       alert(err.response?.data?.detail || "Delete failed!");
     }
@@ -42,16 +61,31 @@ export default function PostCard({ post, onDelete }) {
             </p>
           </div>
         </div>
+        
 
-        {String(post.user.id)===currentUserId &&(
 
-        <button
-          onClick={handleDelete}
+        <div ref={menuRef} className="relative">
+          <div
+           onClick={()=>setOpen(!open)}
+           className="cursor-pointer text-xl font-bold"
+           >
+              ⋮
+          </div>
+          {open && String(post.user.id)===currentUserId &&(
+           <div className="absolute right-0 mt-2 bg-red-50 shadow-md rounded-md p-2">
+           <button
+          onClick={()=>{
+            if(window.confirm("Delete this post")){
+              handleDelete()
+            }
+          }}
           className="text-sm text-red-600 font-semibold hover:underline"
         >
           Delete
         </button>
+        </div>
         )}
+      </div>
       </div>
 
       <p className="mt-3 text-sm text-gray-800">{post.content}</p>
