@@ -12,7 +12,8 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
   const [loading,setLoading]=useState(false)
   const [err,setErr]=useState("")
-
+  
+  
 
   useEffect(() => {
     const handleEsc = (e) => {

@@ -8,8 +8,22 @@ import LikeButton from "../LikeButton"
 export default function PostCard({ post, onDelete }) {
 
   const {user}=useAuth()
+
+
   const [open,setOpen]=useState(false)
+
+  const [expanded,setExpanded]=useState(false)
+  const [showButton,setShowButton]=useState(false)
+
   const menuRef=useRef()
+  const textRef=useRef()
+  
+useEffect(()=>{
+  const el=textRef.current
+  if(el.scrollHeight>el.clientHeight){
+    setShowButton(true)
+  }
+},[])
 
   useEffect(()=>{
     const handleClickOutside=(event)=>{
@@ -63,6 +77,7 @@ export default function PostCard({ post, onDelete }) {
         </div>
         
 
+       {/* delete post button */}
 
         <div ref={menuRef} className="relative">
           <div
@@ -87,8 +102,21 @@ export default function PostCard({ post, onDelete }) {
         )}
       </div>
       </div>
+       
 
-      <p className="mt-3 text-sm text-gray-800">{post.content}</p>
+       {/* content */}
+       <div>
+      <p ref={textRef} className={`${expanded? "" : "line-clamp-2"} mt-3 text-sm text-gray-800`}>{post.content}</p>
+       {showButton && (
+
+      <button
+      onClick={()=>setExpanded(!expanded)}
+      className="text-blue-600 text-sm font-semibold"
+      >
+        {expanded? "See less" : "See more"}
+      </button>
+       )}
+       </div>
 
       {post.image_url && (
         <div className="mt-3">
