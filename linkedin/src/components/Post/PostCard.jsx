@@ -70,6 +70,8 @@ useEffect(()=>{
               {post.user.name}
             </h3>
 
+            <p className="text-[11px] font-semibold text-gray-600">Full-Stack...</p>
+
             <p className="text-xs text-gray-400 mt-1">
               {new Date(post.created_at).toLocaleString()}
             </p>
@@ -111,9 +113,9 @@ useEffect(()=>{
 
       <button
       onClick={()=>setExpanded(!expanded)}
-      className="text-blue-600 text-sm font-semibold"
+      className="text-gray-600 text-sm font-semibold"
       >
-        {expanded? "See less" : "See more"}
+        {expanded? "less..." : "...more"}
       </button>
        )}
        </div>

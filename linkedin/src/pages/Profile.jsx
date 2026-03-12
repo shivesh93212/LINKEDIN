@@ -173,10 +173,19 @@ useEffect(() => {
               Contact info
             </span>
           </p>
+          
+          <div className="flex gap-5 mt-4">
 
           <p className="text-blue-600 font-medium mt-2">
             {profileUser?.followers_count ?? 0} connections
           </p>
+
+           <button 
+            className="text-sm text-blue-600 border border-blue-600 mt-2 px-1 py-1 rounded-full"
+            >
+            Edit Profile
+           </button>
+          </div>
 
         </div>
 
