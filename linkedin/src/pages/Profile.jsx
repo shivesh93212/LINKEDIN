@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import PostCard from "../components/Post/PostCard";
 import ConnectionButton from "../components/ConnectionButton";
 import CreatePostModel from "../components/Post/CreatePostModel";
-import { getUserProfile } from "../api/profileApi";
+import { getUserProfile,updateUserProfile } from "../api/profileApi";
 
 
 export default function Profile() {
@@ -22,6 +22,18 @@ export default function Profile() {
   const [posts, setPosts] = useState([]);
 
   const [isPostModel,setIsPostModel]=useState(false)
+  
+
+  const [isEditOpen,setisEditOpen]=useState(false)
+
+  const [editData,setEditData]=useState({
+    headline:"",
+    about:"",
+    skills:"",
+    experience:"",
+    education:"",
+    location:""
+  })
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -54,6 +66,14 @@ useEffect(() => {
       }
       // console.log("PROFILE DATA:", data);
       setProfileUser(data);
+      setEditData({
+        headline:data.headline || "",
+        about:data.about || "",
+        skills:data.skills || "",
+        experience:data.experience || "",
+        education:data.education || "",
+        location:data.location || ""
+      })
 
       const response = await getAllPosts();
 
@@ -94,6 +114,33 @@ useEffect(() => {
     }
   };
     
+
+  const handleChange=(e)=>{
+    setEditData({
+      ...editData,
+      [e.target.name]:e.target.value
+    })
+  }
+
+  const handleSaveProfile = async()=>{
+    try{
+      await updateUserProfile(editData)
+      const updatedProfile=await getMyProfile()
+      setProfileUser(updatedProfile)
+      setEditData({
+  headline:updatedProfile.headline || "",
+  about:updatedProfile.about || "",
+  skills:updatedProfile.skills || "",
+  experience:updatedProfile.experience || "",
+  education:updatedProfile.education || "",
+  location:updatedProfile.location || ""
+})
+      setisEditOpen(false)
+    }
+    catch(err){
+      console.log("Updated failed",err)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -154,38 +201,130 @@ useEffect(() => {
 
           </div>
 
-          <p className="text-blue-600 font-medium mt-2">
+          {/* <p className="text-blue-600 font-medium mt-2">
             {profileUser?.followers_count ?? 0} followers
+          </p> */}
+          <p className="text-gray-700 mt-2 text-sm font-semibold">
+            {profileUser?.skills}
           </p>
 
-          <p className="text-gray-700 mt-2">
-            Full-Stack Developer | High-Performance Backend Dev | DSA |
-            Logic-Driven Builds That Ship
+          {/* <p className="text-gray-700 mt-2">
+            {profileUser?.headline}
+          </p> */}
+
+          <p className="text-gray-500 mt-5 text-[14px]">
+            {profileUser?.education}
           </p>
 
-          <p className="text-gray-500 mt-2">
-            Oriental Institute of Science & Technology
-          </p>
-
-          <p className="text-gray-500 mt-1">
-            Bhopal, Madhya Pradesh, India · 
+          <p className="text-gray-500 text-[14px]">
+            {profileUser?.location} 
             <span className="text-blue-600 ml-1 cursor-pointer">
               Contact info
             </span>
           </p>
-          
+
           <div className="flex gap-5 mt-4">
 
-          <p className="text-blue-600 font-medium mt-2">
-            {profileUser?.followers_count ?? 0} connections
-          </p>
+<p className="text-blue-600 font-medium">
+  {profileUser?.followers_count ?? 0} connections
+</p>
 
-           <button 
-            className="text-sm text-blue-600 border border-blue-600 mt-2 px-1 py-1 rounded-full"
-            >
-            Edit Profile
-           </button>
-          </div>
+<button
+  onClick={()=>setisEditOpen(true)}
+  className="text-sm text-blue-600 border border-blue-600 px-3 py-1 rounded-full"
+>
+  Edit Profile
+</button>
+
+</div>
+          
+          {/* ✅ EDIT PROFILE MODAL */}
+{isEditOpen && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+    <div className="bg-white w-[500px] p-6 rounded-lg shadow-lg">
+
+      <h2 className="text-xl font-semibold mb-4">
+        Edit Profile
+      </h2>
+
+      {/* SKILLS */}
+      <input
+        name="skills"
+        value={editData.skills}
+        onChange={handleChange}
+        placeholder="Skills (comma separated)"
+        className="w-full border p-2 rounded mb-3"
+      />
+
+      {/* HEADLINE */}
+      <input
+        name="headline"
+        value={editData.headline}
+        onChange={handleChange}
+        placeholder="Headline"
+        className="w-full border p-2 rounded mb-3"
+      />
+
+      {/* ABOUT */}
+      <textarea
+        name="about"
+        value={editData.about}
+        onChange={handleChange}
+        placeholder="About"
+        className="w-full border p-2 rounded mb-3"
+      />
+
+
+      {/* EXPERIENCE */}
+      <input
+        name="experience"
+        value={editData.experience}
+        onChange={handleChange}
+        placeholder="Experience"
+        className="w-full border p-2 rounded mb-3"
+      />
+
+      {/* EDUCATION */}
+      <input
+        name="education"
+        value={editData.education}
+        onChange={handleChange}
+        placeholder="Education"
+        className="w-full border p-2 rounded mb-3"
+      />
+
+      {/* LOCATION */}
+      <input
+        name="location"
+        value={editData.location}
+        onChange={handleChange}
+        placeholder="Location"
+        className="w-full border p-2 rounded mb-3"
+      />
+
+      {/* BUTTONS */}
+      <div className="flex justify-end gap-3 mt-4">
+
+        <button
+          onClick={() => setisEditOpen(false)}
+          className="px-4 py-1 border rounded"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={handleSaveProfile}
+          className="px-4 py-1 bg-blue-600 text-white rounded"
+        >
+          Save
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
 
         </div>
 

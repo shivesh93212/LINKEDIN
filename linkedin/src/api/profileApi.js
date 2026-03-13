@@ -57,3 +57,9 @@ export const getUserProfile = async (userId) => {
 
   return response.data;
 };
+
+export const updateUserProfile= async(profileData)=>{
+  const response = await axiosInstance.put("/users/me",profileData)
+
+  return response.data
+}

@@ -108,7 +108,7 @@ useEffect(()=>{
 
        {/* content */}
        <div>
-      <p ref={textRef} className={`${expanded? "" : "line-clamp-2"} mt-3 text-sm text-gray-800`}>{post.content}</p>
+      <p ref={textRef} className={`${expanded? "" : "line-clamp-3"} mt-3 text-sm text-gray-800`}>{post.content}</p>
        {showButton && (
 
       <button
