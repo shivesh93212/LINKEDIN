@@ -15,6 +15,8 @@ export default function PostCard({ post, onDelete }) {
   const [expanded,setExpanded]=useState(false)
   const [showButton,setShowButton]=useState(false)
 
+  const [selectedImage,setSelectedImage]=useState(null)
+
   const menuRef=useRef()
   const textRef=useRef()
   
@@ -87,7 +89,7 @@ useEffect(()=>{
               {post.user.name}
             </h3>
 
-            <p className="text-[11px] font-semibold text-gray-600">
+            <p className="text-[12px] font-semibold text-gray-600">
               {post.user?.skills?.slice(0,13)}...
               </p>
 
@@ -145,8 +147,28 @@ useEffect(()=>{
             src={`http://127.0.0.1:8000/${post.image_url}`}
             alt="post"
             className="rounded-lg w-full"
+            onClick={()=>setSelectedImage(`http://127.0.0.1:8000/${post.image_url}`)}
           />
         </div>
+      )}
+
+
+      {selectedImage &&(
+        <div
+        className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+        onClick={()=> setSelectedImage(null)}
+        >
+          <img
+          src={selectedImage}
+          alt="full view"
+          className="max-h-[90%] max-w-[90%] rounded-lg transition-transform duration-300"
+          />
+          <button
+          className="absolute top-16 right-5 text-white text-xl"
+          >
+            ✕
+          </button>
+          </div>
       )}
 
       <div className="flex justify-between mt-3 text-sm text-gray-600">
