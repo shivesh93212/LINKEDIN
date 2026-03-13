@@ -25,8 +25,9 @@ export default function Profile() {
   
 
   const [isEditOpen,setisEditOpen]=useState(false)
-
+  
   const [editData,setEditData]=useState({
+    name:"",
     headline:"",
     about:"",
     skills:"",
@@ -67,6 +68,7 @@ useEffect(() => {
       // console.log("PROFILE DATA:", data);
       setProfileUser(data);
       setEditData({
+        name:data.name || "",
         headline:data.headline || "",
         about:data.about || "",
         skills:data.skills || "",
@@ -74,6 +76,7 @@ useEffect(() => {
         education:data.education || "",
         location:data.location || ""
       })
+      
 
       const response = await getAllPosts();
 
@@ -128,12 +131,13 @@ useEffect(() => {
       const updatedProfile=await getMyProfile()
       setProfileUser(updatedProfile)
       setEditData({
-  headline:updatedProfile.headline || "",
-  about:updatedProfile.about || "",
-  skills:updatedProfile.skills || "",
-  experience:updatedProfile.experience || "",
-  education:updatedProfile.education || "",
-  location:updatedProfile.location || ""
+            name:updatedProfile.name || "",
+            headline:updatedProfile.headline || "",
+            about:updatedProfile.about || "",
+            skills:updatedProfile.skills || "",
+            experience:updatedProfile.experience || "",
+            education:updatedProfile.education || "",
+            location:updatedProfile.location || ""
 })
       setisEditOpen(false)
     }
@@ -182,6 +186,8 @@ useEffect(() => {
         </div>
       </div>
 
+      
+
       {/* MAIN CONTENT */}
       <div className="mt-20 px-4 md:px-10 max-w-4xl mx-auto">
 
@@ -190,7 +196,7 @@ useEffect(() => {
 
           <div className="flex items-center justify-between">
 
-            <h2 className="text-3xl font-bold">
+            <h2 className="text-xl font-bold mb-1">
               {profileUser?.name}
             </h2>
 
@@ -216,7 +222,7 @@ useEffect(() => {
             {profileUser?.education}
           </p>
 
-          <p className="text-gray-500 text-[14px]">
+          <p className="text-gray-600 text-[12px] font-semibold">
             {profileUser?.location} 
             <span className="text-blue-600 ml-1 cursor-pointer">
               Contact info
@@ -248,6 +254,16 @@ useEffect(() => {
         Edit Profile
       </h2>
 
+      {/* name */}
+
+      <input
+      name="name"
+      value={editData.name}
+      onChange={handleChange}
+      placeholder="Your full name"
+      className="w-full border p-2 rounded mb-3"
+      />
+
       {/* SKILLS */}
       <input
         name="skills"
@@ -257,25 +273,25 @@ useEffect(() => {
         className="w-full border p-2 rounded mb-3"
       />
 
-      {/* HEADLINE */}
+      {/* HEADLINE
       <input
         name="headline"
         value={editData.headline}
         onChange={handleChange}
         placeholder="Headline"
         className="w-full border p-2 rounded mb-3"
-      />
+      /> */}
 
       {/* ABOUT */}
-      <textarea
+      {/* <textarea
         name="about"
         value={editData.about}
         onChange={handleChange}
         placeholder="About"
         className="w-full border p-2 rounded mb-3"
-      />
+      /> */}
 
-
+     
       {/* EXPERIENCE */}
       <input
         name="experience"
