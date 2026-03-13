@@ -52,6 +52,23 @@ useEffect(()=>{
 
   };
 
+  const getTimeAgo =(date)=>{
+    const now =new Date()
+    const postTime=new Date(date)
+
+    const diff=Math.floor((now-postTime)/1000)
+
+    const hours=Math.floor(diff/3600)
+    const days=Math.floor(diff/86400)
+    const minutes=Math.floor(diff/60)
+
+    if(days>0) return `${days}d ago.`
+    if(hours>0) return `${hours}h ago.`
+    if(minutes>0) return `${minutes}m ago.`
+
+    return "just now"
+  }
+
     const currentUserId = localStorage.getItem("user_id") 
 
   return (
@@ -70,10 +87,12 @@ useEffect(()=>{
               {post.user.name}
             </h3>
 
-            <p className="text-[11px] font-semibold text-gray-600">Full-Stack...</p>
+            <p className="text-[11px] font-semibold text-gray-600">
+              {post.user?.skills?.slice(0,13)}...
+              </p>
 
             <p className="text-xs text-gray-400 mt-1">
-              {new Date(post.created_at).toLocaleString()}
+              {getTimeAgo(post.created_at)}
             </p>
           </div>
         </div>
