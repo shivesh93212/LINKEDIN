@@ -1,7 +1,7 @@
 from fastapi import APIRouter,Depends,HTTPException,UploadFile,File
 from database import get_db
 from models import Profile,Connection,User
-from schemas import ProfileCreate,ProfileResponse
+from schemas import ProfileCreate,ProfileResponse,ProfileUpdate
 from dependencies import get_current_user
 from sqlalchemy.orm import Session
 import uuid
@@ -36,9 +36,57 @@ def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(ge
         "id": current_user.id,
         "name": current_user.name,
         "email": current_user.email,
+
+        "headline": profile.headline if profile else None,
+        "about": profile.about if profile else None,
+        "skills": profile.skills if profile else None,
+        "experience": profile.experience if profile else None,
+        "education": profile.education if profile else None,
+        "location": profile.location if profile else None,
+
         "profile_photo": profile.profile_photo if profile else None,
+
         "followers_count": followers_count,
         "following_count": following_count
+    }
+
+# update profile
+
+@router.put("/me")
+def update_profile(data:ProfileUpdate ,current_user=Depends(get_current_user),db:Session=Depends(get_db)):
+    profile=db.query(Profile).filter(Profile.user_id==current_user.id).first()
+
+    if not profile:
+        profile=Profile(user_id=current_user.id)
+        db.add(profile)
+    
+    if data.name:
+        profile.name = data.name
+
+    if data.headline:
+        profile.headline = data.headline
+
+    if data.about:
+        profile.about = data.about
+
+    if data.skills:
+        profile.skills = data.skills
+
+    if data.experience:
+        profile.experience = data.experience
+
+    if data.education:
+        profile.education = data.education
+
+    if data.location:
+        profile.location = data.location
+
+    db.commit()
+    db.refresh(profile)
+
+    return{
+        "message":"Profile updated successfully",
+        "profile":profile
     }
 
 

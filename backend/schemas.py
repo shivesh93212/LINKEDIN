@@ -1,6 +1,6 @@
 from pydantic import BaseModel,EmailStr
 from datetime import datetime
-
+from typing import Optional
 
 class UserCreate(BaseModel):
     name:str
@@ -25,6 +25,15 @@ class ProfileCreate(BaseModel):
     experience:str|None=None
     education:str|None=None
     location:str|None=None
+
+class ProfileUpdate(BaseModel):
+   name:Optional[str]=None
+   headline:Optional[str]=None
+   about:Optional[str]=None
+   skills:Optional[str]=None
+   experience:Optional[str]=None
+   education:Optional[str]=None
+   location:Optional[str]=None
 
 class ProfileResponse(BaseModel):
     id:int
