@@ -61,7 +61,7 @@ def update_profile(data:ProfileUpdate ,current_user=Depends(get_current_user),db
         db.add(profile)
     
     if data.name:
-        profile.name = data.name
+        current_user.name = data.name
 
     if data.headline:
         profile.headline = data.headline
