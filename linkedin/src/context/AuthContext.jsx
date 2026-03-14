@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUser = async () => {
       try {
-        const res = await axiosInstance.get("/users/profile");
+        const res = await axiosInstance.get("/users/me");
 
         setUser(res.data);  
         // Save profile in global state

@@ -84,7 +84,7 @@ function ConnectionButton({profileUserId}){
              <button
              onClick={handleReject}
              disabled={loading}
-             classname="px-4 py-1 border border-gray-400 rounded-full"
+             className="px-4 py-1 border border-gray-400 rounded-full"
              >
                 Reject
              </button>

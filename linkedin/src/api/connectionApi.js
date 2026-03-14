@@ -24,23 +24,23 @@ export const sendConnectionRequest = async (userId)=>{
 
 // accept request
 
-export const acceptConnection = async ()=>{
-    const data  = axiosInstance.post(`/connections/accept/${requestId}`)
+export const acceptConnection = async (requestId)=>{
+    const res  = axiosInstance.post(`/connections/accept/${requestId}`)
     return res.data
 }
 
 // reject request
 
-export const rejectConnection = async ()=>{
+export const rejectConnection = async (requestId)=>{
     const res = axiosInstance.post(`/connections/reject/${requestId}`)
     return  res.data
 }
 
 // get status
 
-export const getConnectionStatus = async ()=>{
-    const data = await axiosInstance.get(`/connections/status/${userId}`)
-    
+export const getConnectionStatus = async (userId)=>{
+    const res = await axiosInstance.get(`/connections/status/${userId}`)
+    return res.data
 }
 
 // pending status

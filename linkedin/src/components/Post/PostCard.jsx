@@ -3,12 +3,19 @@ import { deletePost } from "../../api/postApi";
 import { getProfileImage } from "../../config";
 import { useAuth } from "../../context/AuthContext";
 import LikeButton from "../LikeButton"
-
+import {Link,useParams} from "react-router-dom"
 
 export default function PostCard({ post, onDelete }) {
 
   const {user}=useAuth()
-
+ 
+  // const Profile=()=>{
+  //   const {id}=useParams()
+  //   console.log(id)
+  // }
+  // useEffect(()=>{
+  //   const res=await getUserProfile(id)
+  // })
 
   const [open,setOpen]=useState(false)
 
@@ -71,27 +78,32 @@ useEffect(()=>{
     return "just now"
   }
 
-    const currentUserId = localStorage.getItem("user_id") 
+    const currentUserId = localStorage.getItem("user_id")
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 md:mt-0">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
-          
+          <Link to={`/profile/${post.user.id}`}>
           <img
             src={getProfileImage(post.user?.profile_photo)}
             alt="user"
             className="w-12 h-12 rounded-full"
           />
+          </Link>
 
           <div>
+          <Link to={`/profile/${post.user.id}`}>
             <h3 className="font-semibold text-gray-900">
               {post.user.name}
             </h3>
-
+            </Link>
+           
+           <Link to={`/profile/${post.user.id}`}>
             <p className="text-[12px] font-semibold text-gray-600">
               {post.user?.skills?.slice(0,13)}...
               </p>
+              </Link>
 
             <p className="text-xs text-gray-400 mt-1">
               {getTimeAgo(post.created_at)}

@@ -9,11 +9,9 @@ import ConnectionButton from "../components/ConnectionButton";
 import CreatePostModel from "../components/Post/CreatePostModel";
 import { getUserProfile,updateUserProfile } from "../api/profileApi";
 
-
 export default function Profile() {
 
-  const { id } = useParams();              // ✅ route param
-  const profileUserId = id ? Number(id) : null;   // ✅ define properly
+  const { id } = useParams(); // route param
 
   const { user: loggedInUser, logout } = useAuth();
   const [profileUser, setProfileUser] = useState(null);
@@ -22,8 +20,6 @@ export default function Profile() {
   const [posts, setPosts] = useState([]);
 
   const [isPostModel,setIsPostModel]=useState(false)
-  
-
   const [isEditOpen,setisEditOpen]=useState(false)
   
   const [editData,setEditData]=useState({
@@ -39,10 +35,9 @@ export default function Profile() {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-
+  // ✅ FIX: profileUserId remove ho chuka hai, id use karo
   const isOwnProfile =
-  !profileUserId || profileUserId === loggedInUser?.id;
-
+    !id || Number(id) === Number(loggedInUser?.id);
 
   const handleLogout = () => {
     logout();
@@ -50,23 +45,22 @@ export default function Profile() {
   };
 
 useEffect(() => {
-  if (!loggedInUser) return;  // wait until auth loads
+  if (!loggedInUser) return;
 
   const loadProfileAndPosts = async () => {
     try {
+
       let data;
 
-      const isOwn =
-        !profileUserId || profileUserId === loggedInUser.id;
-
-      if (isOwn) {
-        data = await getMyProfile();
-        // console.log("PROFILE DATA:", data);
+      // ✅ FIX: correct profile loading logic
+      if (id && Number(id) !== Number(loggedInUser?.id)) {
+        data = await getUserProfile(Number(id));
       } else {
-        data = await getUserProfile(profileUserId);
+        data = await getMyProfile();
       }
-      // console.log("PROFILE DATA:", data);
+
       setProfileUser(data);
+
       setEditData({
         name:data.name || "",
         headline:data.headline || "",
@@ -76,7 +70,6 @@ useEffect(() => {
         education:data.education || "",
         location:data.location || ""
       })
-      
 
       const response = await getAllPosts();
 
@@ -98,7 +91,9 @@ useEffect(() => {
   };
 
   loadProfileAndPosts();
-}, [profileUserId, loggedInUser]);
+
+// ✅ FIX: dependency me profileUserId ki jagah id use karo
+}, [id, loggedInUser]);
 
   const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
@@ -149,11 +144,9 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* COVER */}
       <div className="relative">
-        <div className="h-40 bg-zinc-300  rounded-t-xl relative overflow-hidden"></div>
+        <div className="h-40 bg-zinc-300 rounded-t-xl relative overflow-hidden"></div>
 
-        {/* Profile Image */}
         <div className="absolute -bottom-16 left-6">
           <div className="relative">
             <img
@@ -168,12 +161,14 @@ useEffect(() => {
               className="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white object-cover shadow-lg"
             />
 
+            {isOwnProfile && (
             <button
               onClick={() => fileInputRef.current.click()}
               className="absolute bottom-2 -right-3 bg-white p-2 rounded-full shadow hover:bg-gray-200 transition"
             >
               <Pencil size={15} />
             </button>
+            )}
 
             <input
               type="file"
@@ -186,12 +181,8 @@ useEffect(() => {
         </div>
       </div>
 
-      
-
-      {/* MAIN CONTENT */}
       <div className="mt-20 px-4 md:px-10 max-w-4xl mx-auto">
 
-        {/* PROFILE CARD */}
         <div className="bg-white rounded-lg shadow p-6">
 
           <div className="flex items-center justify-between">
@@ -200,23 +191,16 @@ useEffect(() => {
               {profileUser?.name}
             </h2>
 
-            {/* ✅ Button show only if profileUserId exists AND not own profile */}
-           {!isOwnProfile && (
-            <ConnectionButton profileUserId={profileUserId} />
+            {!isOwnProfile &&  id &&(
+              // ✅ FIX: profileUserId remove ho chuka hai
+              <ConnectionButton profileUserId={Number(id)} />
             )}
 
           </div>
 
-          {/* <p className="text-blue-600 font-medium mt-2">
-            {profileUser?.followers_count ?? 0} followers
-          </p> */}
           <p className="text-gray-700 mt-2 text-sm font-semibold">
             {profileUser?.skills}
           </p>
-
-          {/* <p className="text-gray-700 mt-2">
-            {profileUser?.headline}
-          </p> */}
 
           <p className="text-gray-500 mt-5 text-[14px]">
             {profileUser?.education}
@@ -235,116 +219,19 @@ useEffect(() => {
   {profileUser?.followers_count ?? 0} connections
 </p>
 
+{isOwnProfile && (
 <button
   onClick={()=>setisEditOpen(true)}
   className="text-sm text-blue-600 border border-blue-600 px-3 py-1 rounded-full"
 >
   Edit Profile
 </button>
+)}
 
 </div>
-          
-          {/* ✅ EDIT PROFILE MODAL */}
-{isEditOpen && (
-  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-
-    <div className="bg-white w-[500px] p-6 rounded-lg shadow-lg">
-
-      <h2 className="text-xl font-semibold mb-4">
-        Edit Profile
-      </h2>
-
-      {/* name */}
-
-      <input
-      name="name"
-      value={editData.name}
-      onChange={handleChange}
-      placeholder="Your full name"
-      className="w-full border p-2 rounded mb-3"
-      />
-
-      {/* SKILLS */}
-      <input
-        name="skills"
-        value={editData.skills}
-        onChange={handleChange}
-        placeholder="Skills (comma separated)"
-        className="w-full border p-2 rounded mb-3"
-      />
-
-      {/* HEADLINE
-      <input
-        name="headline"
-        value={editData.headline}
-        onChange={handleChange}
-        placeholder="Headline"
-        className="w-full border p-2 rounded mb-3"
-      /> */}
-
-      {/* ABOUT */}
-      {/* <textarea
-        name="about"
-        value={editData.about}
-        onChange={handleChange}
-        placeholder="About"
-        className="w-full border p-2 rounded mb-3"
-      /> */}
-
-     
-      {/* EXPERIENCE */}
-      <input
-        name="experience"
-        value={editData.experience}
-        onChange={handleChange}
-        placeholder="Experience"
-        className="w-full border p-2 rounded mb-3"
-      />
-
-      {/* EDUCATION */}
-      <input
-        name="education"
-        value={editData.education}
-        onChange={handleChange}
-        placeholder="Education"
-        className="w-full border p-2 rounded mb-3"
-      />
-
-      {/* LOCATION */}
-      <input
-        name="location"
-        value={editData.location}
-        onChange={handleChange}
-        placeholder="Location"
-        className="w-full border p-2 rounded mb-3"
-      />
-
-      {/* BUTTONS */}
-      <div className="flex justify-end gap-3 mt-4">
-
-        <button
-          onClick={() => setisEditOpen(false)}
-          className="px-4 py-1 border rounded"
-        >
-          Cancel
-        </button>
-
-        <button
-          onClick={handleSaveProfile}
-          className="px-4 py-1 bg-blue-600 text-white rounded"
-        >
-          Save
-        </button>
-
-      </div>
-
-    </div>
-  </div>
-)}
 
         </div>
 
-        {/* ACTIVITY */}
         <div className="mt-8">
 
           <div className="bg-white rounded-xl border border-gray-200 p-5">
@@ -380,40 +267,13 @@ useEffect(() => {
 
         </div>
 
-        {/* SETTINGS */}
-        <div className="mt-10 pb-10">
-          <div className="bg-white rounded-lg shadow p-5">
-
-            <div
-              onClick={() => setOpen(!open)}
-              className="flex items-center justify-between cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <Settings size={18} />
-                <h3 className="text-sm font-medium">Settings</h3>
-              </div>
-            </div>
-
-            {open && (
-              <div className="mt-4 border-t pt-3">
-                <button
-                  onClick={handleLogout}
-                  className="text-red-500 text-sm hover:text-red-600"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-
-          </div>
-        </div>
-
       </div>
+
      <CreatePostModel
       isOpen={isPostModel}
       onClose={()=>setIsPostModel(false)}
-      
      />
+
     </div>
   );
 }
