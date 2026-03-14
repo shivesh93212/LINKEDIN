@@ -151,7 +151,7 @@ useEffect(() => {
 
       {/* COVER */}
       <div className="relative">
-        <div className="h-40 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 rounded-t-xl relative overflow-hidden"></div>
+        <div className="h-40 bg-zinc-300  rounded-t-xl relative overflow-hidden"></div>
 
         {/* Profile Image */}
         <div className="absolute -bottom-16 left-6">

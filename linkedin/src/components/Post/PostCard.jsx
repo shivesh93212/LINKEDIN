@@ -146,7 +146,7 @@ useEffect(()=>{
           <img
             src={`http://127.0.0.1:8000/${post.image_url}`}
             alt="post"
-            className="rounded-lg w-full"
+            className="rounded-lg w-full border border-gray-300 object-cover"
             onClick={()=>setSelectedImage(`http://127.0.0.1:8000/${post.image_url}`)}
           />
         </div>
@@ -171,7 +171,9 @@ useEffect(()=>{
           </div>
       )}
 
-      <div className="flex justify-between mt-3 text-sm text-gray-600">
+
+
+      <div className="flex justify-between mt-3 text-sm text-gray-600 border-t border-gray-600 ">
         <LikeButton postId={post.id} />
         <button className="hover:text-blue-600">Comment</button>
         <button className="hover:text-blue-600">Repost</button>
