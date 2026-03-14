@@ -215,14 +215,14 @@ useEffect(() => {
 
           <div className="flex gap-5 mt-4">
 
-<p className="text-blue-600 font-medium">
-  {profileUser?.followers_count ?? 0} connections
+<p className="text-blue-600 font-medium text-sm">
+  {profileUser?.connections_count ?? 0} connections
 </p>
 
 {isOwnProfile && (
 <button
   onClick={()=>setisEditOpen(true)}
-  className="text-sm text-blue-600 border border-blue-600 px-3 py-1 rounded-full"
+  className="text-sm text-blue-600 border border-blue-600 -mt-1 px-3 py-1 rounded-full"
 >
   Edit Profile
 </button>
