@@ -9,13 +9,6 @@ export default function PostCard({ post, onDelete }) {
 
   const {user}=useAuth()
  
-  // const Profile=()=>{
-  //   const {id}=useParams()
-  //   console.log(id)
-  // }
-  // useEffect(()=>{
-  //   const res=await getUserProfile(id)
-  // })
 
   const [open,setOpen]=useState(false)
 
