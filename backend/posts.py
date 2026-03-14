@@ -86,7 +86,8 @@ def feed(page:int=Query(1,ge=1),limit:int=Query(10,le=50),current_user=Depends(g
             "user": {
                 "id": post.user.id,
                 "name": post.user.name,
-                "profile_photo": profile.profile_photo if profile else None
+                "profile_photo": profile.profile_photo if profile else None,
+                "skills":profile.skills if profile else None
             }
         })
 
@@ -169,7 +170,8 @@ def all_posts(db: Session = Depends(get_db)):
             "user": {
                 "id": post.user.id,
                 "name": post.user.name,
-                "profile_photo": profile.profile_photo if profile else None
+                "profile_photo": profile.profile_photo if profile else None,
+                "skills": profile.skills if profile else None
             }
         })
 
