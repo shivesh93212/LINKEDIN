@@ -156,13 +156,19 @@ def get_user_profile(user_id: int, db: Session = Depends(get_db)):
     ).count()
 
     return {
-        "id": user.id,
-        "name": user.name,
-        "email": user.email,
-        "profile_photo": profile.profile_photo if profile else None,
-        "followers_count": followers_count,
-        "following_count": following_count
-    }
+    "id": user.id,
+    "name": user.name,
+    "email": user.email,
+    "headline": profile.headline if profile else None,
+    "about": profile.about if profile else None,
+    "skills": profile.skills if profile else None,
+    "experience": profile.experience if profile else None,
+    "education": profile.education if profile else None,
+    "location": profile.location if profile else None,
+    "profile_photo": profile.profile_photo if profile else None,
+    "followers_count": followers_count,
+    "following_count": following_count
+}
 
 # image upload
 
