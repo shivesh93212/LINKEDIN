@@ -23,13 +23,9 @@ def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(ge
 
     
 
-    followers_count=db.query(Connection).filter(
-        Connection.receiver_id==current_user.id,
-        Connection.status=="accepted"
-    ).count()
-    following_count=db.query(Connection).filter(
-        Connection.sender_id==current_user.id,
-        Connection.status=="accepted"
+    connections_count = db.query(Connection).filter(
+    Connection.status == "accepted",
+    ((Connection.sender_id == current_user.id) | (Connection.receiver_id == current_user.id))
     ).count()
 
     return {
@@ -46,8 +42,9 @@ def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(ge
 
         "profile_photo": profile.profile_photo if profile else None,
 
-        "followers_count": followers_count,
-        "following_count": following_count
+        # "followers_count": followers_count,
+        # "following_count": following_count,
+        "connections_count": connections_count
     }
 
 # update profile
@@ -145,14 +142,9 @@ def get_user_profile(user_id: int, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(404, "User not found")
 
-    followers_count = db.query(Connection).filter(
-        Connection.receiver_id == user_id,
-        Connection.status == "accepted"
-    ).count()
-
-    following_count = db.query(Connection).filter(
-        Connection.sender_id == user_id,
-        Connection.status == "accepted"
+    connections_count = db.query(Connection).filter(
+    Connection.status == "accepted",
+    ((Connection.sender_id == user_id) | (Connection.receiver_id == user_id))
     ).count()
 
     return {
@@ -166,8 +158,9 @@ def get_user_profile(user_id: int, db: Session = Depends(get_db)):
     "education": profile.education if profile else None,
     "location": profile.location if profile else None,
     "profile_photo": profile.profile_photo if profile else None,
-    "followers_count": followers_count,
-    "following_count": following_count
+    # "followers_count": followers_count,
+    # "following_count": following_count,
+    "connections_count":connections_count
 }
 
 # image upload
