@@ -145,7 +145,7 @@ const sendShare=async()=>{
         <div className="flex items-start gap-3">
           <Link to={`/profile/${post.user.id}`}>
           <img
-            src={getProfileImage(post.user?.profile_photo)}
+            src={post.user?.profile_photo}
             alt="user"
             className="w-12 h-12 rounded-full"
           />
@@ -231,10 +231,10 @@ const sendShare=async()=>{
       {post.image_url && (
         <div className="mt-3 w-full overflow-hidden rounded-lg">
           <img
-            src={` https://prolinker-pqo7.onrender.com/${post.image_url}`}
+            src={post.image_url}
             alt="post"
             className="rounded-lg w-full border border-gray-300 object-cover"
-            onClick={()=>setSelectedImage(` https://prolinker-pqo7.onrender.com/${post.image_url}`)}
+            onClick={()=>setSelectedImage(post.image_url)}
           />
         </div>
       )}
@@ -309,7 +309,7 @@ ${selectedUser===user.user_id ? "bg-blue-100":"hover:bg-gray-100"}`}
 >
 
 <img
-src={getProfileImage(user.profile_photo)}
+src={user.profile_photo}
 className="w-10 h-10 rounded-full"
 />
 

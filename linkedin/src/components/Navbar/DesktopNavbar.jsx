@@ -155,7 +155,7 @@ export default function DesktopNavbar() {
         className="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer"
       >
         <img
-          src={getProfileImage(user.profile_photo)}
+          src={user.profile_photo}
           className="w-10 h-10 rounded-full"
         />
 
@@ -249,7 +249,7 @@ export default function DesktopNavbar() {
                 className="flex flex-col items-center text-xs hover:text-black" 
               >
                 <img
-                  src={getProfileImage(user?.profile_photo)}
+                  src={user.profile_photo}
                   alt="profile"
                   className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9 rounded-full"
 

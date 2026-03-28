@@ -49,27 +49,40 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
     }
   }
 
-  const handleCreatePost=async()=>{
-    setErr("")
-    try{
-      setLoading(true)
-      const post=await createPost(content)
-      if(selectedImage){
-        await uploadPostImage(post.id,selectedImage)
-      }
-      if(onPostCreated){
-        onPostCreated()
-      }
-      onClose()
-    }
-    catch(err){
-      setErr(err.response?.data?.detail || "Post creation failed")
+ const handleCreatePost = async () => {
+  setErr("");
+  try {
+    setLoading(true);
+
+    const post = await createPost(content);
+
+    let imageUrl = null;
+
+    if (selectedImage) {
+      const res = await uploadPostImage(post.id, selectedImage);
+      imageUrl = res.image_url;
     }
 
-    finally{
-      setLoading(false)
+    // 🔥 NEW POST WITH IMAGE
+    const newPost = {
+      ...post,
+      image_url: imageUrl,
+      user: user,
+    };
+
+    if (onPostCreated) {
+      onPostCreated(newPost);
     }
+
+    onClose();
+  } catch (err) {
+    setErr(err.response?.data?.detail || "Post creation failed");
+  } finally {
+    setLoading(false);
   }
+};
+
+
   return (
     <div 
     onClick={onClose}
@@ -95,7 +108,7 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
         {/* USER INFO */}
         <div className="flex items-center gap-3 px-4 py-4">
-          <img src={getProfileImage(user?.profile_photo)} alt="profile" 
+          <img src={user?.profile_photo} alt="profile" 
           className= "w-12 h-12 rounded-full object-cover"
           />
 

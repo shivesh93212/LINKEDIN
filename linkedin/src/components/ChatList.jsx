@@ -48,9 +48,11 @@ export default function ChatList({selectUser}){
     >
 
       <img
-        src={chat.profile_photo 
-        ? ` https://prolinker-pqo7.onrender.com/${chat.profile_photo}`
-        : " https://prolinker-pqo7.onrender.com/uploads/profile/dummy_image.png"}
+        src={
+          chat.profile_photo
+          ? chat.profile_photo   // Cloudinary URL direct
+          : "https://via.placeholder.com/150"  // fallback image
+        }
         className="w-10 h-10 rounded-full object-cover"
       />
 

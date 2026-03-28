@@ -90,7 +90,7 @@ export default function Network() {
             <Link to={`/profile/${request.sender?.id}`}>
            <div className="flex items-center gap-3">
           <img
-            src={getProfileImage(req.sender?.profile_photo)}
+            src={req.sender?.profile_photo}
             className="w-10 h-10 rounded-full"
             />
 

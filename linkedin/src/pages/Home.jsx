@@ -47,7 +47,7 @@ function Home() {
               <div className="flex flex-col items-center -mt-7 p-4">
                 
                 <img
-                  src={getProfileImage(user?.profile_photo)}
+                  src={user?.profile_photo}
                   alt="profile"
                   className="w-16 h-16 rounded-full border-2 border-white"
                 />
@@ -71,7 +71,7 @@ function Home() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 hidden md:block">
               <div className="flex items-center gap-3">
                 <img
-                  src={getProfileImage(user?.profile_photo)}
+                  src={user?.profile_photo}
                   alt="profile"
                   className="w-12 h-12 rounded-full"
                 />
@@ -101,7 +101,7 @@ function Home() {
           <div className="hidden md:block md:col-span-3">
             <div className="sticky top-20">
             <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <h2 className="font-semibold text-gray-900">LinkedIn News</h2>
+              <h2 className="font-semibold text-gray-900">ProLinker News</h2>
 
               <ul className="mt-3 space-y-3 text-sm">
                 <li>
