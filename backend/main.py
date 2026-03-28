@@ -18,7 +18,7 @@ from admin import router as admin_router
 from reports import router as report_router
 from jobs import router as jobs_router
 from chatBot import router as chat_bot_router
-from upload import router as upload_router
+
 
 
 
@@ -62,4 +62,3 @@ app.include_router(report_router)
 app.include_router(admin_router)
 app.include_router(jobs_router)
 app.include_router(chat_bot_router)
-app.include_router(upload_router)
