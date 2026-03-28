@@ -10,7 +10,7 @@ import os
 
 # 🔥 ADD THIS
 import cloudinary.uploader
-from cloudinary_config import cloudinary
+import cloudinary_config
 
 
 router=APIRouter(prefix="/users",tags=["users"])
@@ -101,22 +101,31 @@ UPLOAD_DIR="uploads/profile"
 os.makedirs(UPLOAD_DIR,exist_ok=True)
 
 @router.post("/profile/photo")
-def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_current_user),db:Session=Depends(get_db)):
+def upload_profile_photo(
+    file: UploadFile = File(...),
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
 
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Only image files allowed")
 
-    # 🔥 ONLY THIS PART CHANGED (Cloudinary)
     try:
         result = cloudinary.uploader.upload(
             file.file,
             folder="profile_photos"
         )
+
         image_url = result["secure_url"]
+
+    except Exception as e:
+        print("🔥 CLOUDINARY ERROR:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
     finally:
         file.file.close()
 
-    profile=db.query(Profile).filter(Profile.user_id==current_user.id).first()
+    profile = db.query(Profile).filter(Profile.user_id == current_user.id).first()
 
     if not profile:
         profile = Profile(
@@ -124,15 +133,14 @@ def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_curr
             name=current_user.name
         )
         db.add(profile)
-    
-    # 🔥 SAVE CLOUDINARY URL
+
     profile.profile_photo = image_url
 
     db.commit()
     db.refresh(profile)
 
-    return{
-        "message":"Profile photo uploaded",
+    return {
+        "message": "Profile photo uploaded",
         "photo_url": profile.profile_photo
     }
 

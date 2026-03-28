@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from notifications import create_notification
 
 import cloudinary.uploader
-from cloudinary_config import cloudinary
+import cloudinary_config
 
 
 router = APIRouter(prefix="/posts", tags=["posts"])
@@ -164,7 +164,6 @@ def upload_post_image(
         raise HTTPException(400, "Only image files allowed")
 
     try:
-        # 🔥 upload to cloudinary
         result = cloudinary.uploader.upload(
             file.file,
             folder="posts"
@@ -172,7 +171,6 @@ def upload_post_image(
 
         image_url = result["secure_url"]
 
-        # ✅ save in DB
         post.image_url = image_url
         db.commit()
         db.refresh(post)
@@ -183,6 +181,7 @@ def upload_post_image(
         }
 
     except Exception as e:
+        print("🔥 ERROR:", e)
         raise HTTPException(500, str(e))
 
 
