@@ -108,7 +108,7 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
         {/* USER INFO */}
         <div className="flex items-center gap-3 px-4 py-4">
-          <img src={user?.profile_photo} alt="profile" 
+          <img src={user?.profile_photo || "https://via.placeholder.com/150"} alt="profile" 
           className= "w-12 h-12 rounded-full object-cover"
           />
 

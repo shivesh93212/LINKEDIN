@@ -160,7 +160,7 @@ const sendShare=async()=>{
            
            <Link to={`/profile/${post.user.id}`}>
             <p className="text-[12px] font-semibold text-gray-600">
-              {post.user?.skills?.slice(0,13)}...
+             {post.user?.skills?.slice?.(0,13) || ""}...
               </p>
               </Link>
 
@@ -309,7 +309,7 @@ ${selectedUser===user.user_id ? "bg-blue-100":"hover:bg-gray-100"}`}
 >
 
 <img
-src={user.profile_photo}
+src={user?.profile_photo || "https://via.placeholder.com/150"}
 className="w-10 h-10 rounded-full"
 />
 

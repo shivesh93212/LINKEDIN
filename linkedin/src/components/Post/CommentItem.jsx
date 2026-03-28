@@ -78,7 +78,7 @@ export default function CommentItem({
             
             <Link to={`/profile/${comment.user.id}`}>
             <p className="text-[11px] text-gray-500">
-              {comment.user?.profile?.skills.slice(0,13)}...
+              {comment.user?.profile?.skills?.slice(0,13) || ""}...
             </p>
             </Link>
             
