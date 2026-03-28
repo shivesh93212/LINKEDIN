@@ -63,7 +63,7 @@ export default function Notifications(){
 
      <img
      src={
-        n.actor.profile_photo
+        n.actor?.profile_photo
         ? n.actor.profile_photo   // Cloudinary URL direct
         : "https://via.placeholder.com/150"  // fallback image
       }
@@ -78,7 +78,7 @@ export default function Notifications(){
        <p className="text-sm">
 
         <span className="font-semibold">
-          {n.actor.name}
+          {n.actor?.name}
         </span>
 
         {" "} posted something

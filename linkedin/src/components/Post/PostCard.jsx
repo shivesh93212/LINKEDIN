@@ -145,7 +145,7 @@ const sendShare=async()=>{
         <div className="flex items-start gap-3">
           <Link to={`/profile/${post.user.id}`}>
           <img
-            src={post.user?.profile_photo}
+            src={post.user?.profile_photo || "https://via.placeholder.com/150"}
             alt="user"
             className="w-12 h-12 rounded-full"
           />

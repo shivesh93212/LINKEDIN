@@ -82,7 +82,7 @@ useEffect(()=>{
           <Link to="/profile">
             {/* ✅ FIXED: profile click -> profile page */}
             <img
-              src={user.profile_photo}
+              src={user.profile_photo  || "https://via.placeholder.com/150"}
               alt="profile"
               className="w-9 h-9 rounded-full border border-gray-500"
             />
@@ -114,7 +114,7 @@ useEffect(()=>{
         className="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer"
       >
         <img
-          src={user.profile_photo}
+          src={user.profile_photo || "https://via.placeholder.com/150"}
           className="w-10 h-10 rounded-full"
         />
 

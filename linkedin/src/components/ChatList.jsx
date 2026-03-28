@@ -42,14 +42,14 @@ export default function ChatList({selectUser}){
 
   {chats.map((chat) => (
     <div
-      key={chat.user_id}
+      key={chat?.user_id}
       onClick={() => selectUser(chat)}
       className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100 border-b transition"
     >
 
       <img
         src={
-          chat.profile_photo
+          chat?.profile_photo
           ? chat.profile_photo   // Cloudinary URL direct
           : "https://via.placeholder.com/150"  // fallback image
         }
@@ -57,10 +57,10 @@ export default function ChatList({selectUser}){
       />
 
       <div className="flex flex-col">
-        <p className="font-medium">{chat.name}</p>
+        <p className="font-medium">{chat?.name}</p>
 
         <p className="text-sm text-gray-500 truncate w-[150px]">
-          {chat.last_message}
+          {chat?.last_message}
         </p>
       </div>
 

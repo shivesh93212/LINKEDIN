@@ -90,11 +90,11 @@ export default function Network() {
             <Link to={`/profile/${request.sender?.id}`}>
            <div className="flex items-center gap-3">
           <img
-            src={req.sender?.profile_photo}
+            src={req.sender?.profile_photo || }
             className="w-10 h-10 rounded-full"
             />
 
-           <p className="font-medium">{req.sender?.name}</p>
+           <p className="font-medium">{req.sender?.name || "https://via.placeholder.com/150"}</p>
              </div>
              </Link>
 

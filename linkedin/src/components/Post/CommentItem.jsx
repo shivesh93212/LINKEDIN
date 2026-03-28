@@ -52,7 +52,7 @@ export default function CommentItem({
         {/* profile image */}
          <Link to={`/profile/${comment.user.id}`}>
         <img
-          src={comment.user?.profile?.profile_photo}
+          src={comment.user?.profile?.profile_photo || "https://via.placeholder.com/150" }
           className="w-9 h-9 rounded-full mt-2"
           alt="user"
         />
