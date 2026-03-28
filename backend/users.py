@@ -111,10 +111,13 @@ def upload_profile_photo(
         raise HTTPException(status_code=400, detail="Only image files allowed")
 
     try:
+        print("📁 FILE:", file.filename)
+        print("📁 TYPE:", file.content_type)
         result = cloudinary.uploader.upload(
             file.file,
             folder="profile_photos"
         )
+        print("✅ CLOUDINARY RESULT:", result)
 
         image_url = result["secure_url"]
 
