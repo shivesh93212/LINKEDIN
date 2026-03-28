@@ -1,0 +1,41 @@
+from fastapi import WebSocket
+
+class ConnectionManager:
+
+    def __init__(self):
+        # user_id -> list of websockets
+        self.active_connections: dict[int, list[WebSocket]] = {}
+
+    async def connect(self, user_id: int, websocket: WebSocket):
+        await websocket.accept()
+
+        if user_id not in self.active_connections:
+            self.active_connections[user_id] = []
+
+        self.active_connections[user_id].append(websocket)
+
+    def disconnect(self, user_id: int, websocket: WebSocket):
+
+        connections = self.active_connections.get(user_id)
+
+        if not connections:
+            return
+
+        if websocket in connections:
+            connections.remove(websocket)
+
+        if not connections:
+            self.active_connections.pop(user_id)
+
+    async def send_message(self, user_id: int, message: dict):
+
+        connections = self.active_connections.get(user_id)
+
+        if not connections:
+            return
+
+        for websocket in connections:
+            try:
+                await websocket.send_json(message)
+            except:
+                pass
