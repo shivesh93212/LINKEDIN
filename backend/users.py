@@ -8,6 +8,9 @@ import uuid
 import shutil
 import os
 
+# 🔥 ADD THIS
+import cloudinary.uploader
+from cloudinary_config import cloudinary
 
 
 router=APIRouter(prefix="/users",tags=["users"])
@@ -20,8 +23,6 @@ def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(ge
     profile=db.query(Profile).filter(
         Profile.user_id==current_user.id
     ).first()
-
-    
 
     connections_count = db.query(Connection).filter(
     Connection.status == "accepted",
@@ -42,8 +43,6 @@ def get_current_user_profile( db:Session=Depends(get_db),current_user=Depends(ge
 
         "profile_photo": profile.profile_photo if profile else None,
 
-        # "followers_count": followers_count,
-        # "following_count": following_count,
         "connections_count": connections_count
     }
 
@@ -60,7 +59,6 @@ def update_profile(
         Profile.user_id == current_user.id
     ).first()
 
-    # agar profile exist nahi hai to create karo
     if not profile:
         profile = Profile(
             user_id=current_user.id,
@@ -68,7 +66,6 @@ def update_profile(
         )
         db.add(profile)
 
-    # user table update
     if data.name is not None:
         current_user.name = data.name
         profile.name = data.name
@@ -108,13 +105,14 @@ def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_curr
 
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Only image files allowed")
-    
-    filename=f"{uuid.uuid4()}_{file.filename}"
-    file_path=os.path.join(UPLOAD_DIR,filename)
-    try:
 
-        with open(file_path,"wb") as buffer:
-            shutil.copyfileobj(file.file,buffer)
+    # 🔥 ONLY THIS PART CHANGED (Cloudinary)
+    try:
+        result = cloudinary.uploader.upload(
+            file.file,
+            folder="profile_photos"
+        )
+        image_url = result["secure_url"]
     finally:
         file.file.close()
 
@@ -127,7 +125,8 @@ def upload_profile_photo(file:UploadFile=File(...),current_user=Depends(get_curr
         )
         db.add(profile)
     
-    profile.profile_photo = f"uploads/profile/{filename}"
+    # 🔥 SAVE CLOUDINARY URL
+    profile.profile_photo = image_url
 
     db.commit()
     db.refresh(profile)
@@ -162,7 +161,5 @@ def get_user_profile(user_id: int, db: Session = Depends(get_db)):
     "education": profile.education if profile else None,
     "location": profile.location if profile else None,
     "profile_photo": profile.profile_photo if profile else None,
-    # "followers_count": followers_count,
-    # "following_count": following_count,
     "connections_count":connections_count
 }

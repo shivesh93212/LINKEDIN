@@ -12,3 +12,4 @@ groq
 pydantic
 email-validator
 gunicorn
+cloudinary
