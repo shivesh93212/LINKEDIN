@@ -40,7 +40,7 @@ export default function Profile() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+     window.location.href = "/login";
   };
 
 useEffect(() => {
