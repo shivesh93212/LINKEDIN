@@ -49,8 +49,8 @@ export default function ChatList({selectUser}){
 
       <img
         src={chat.profile_photo 
-        ? `https://prolinker-zmjm.onrender.com/${chat.profile_photo}`
-        : "https://prolinker-zmjm.onrender.com/uploads/profile/dummy_image.png"}
+        ? ` https://prolinker-pqo7.onrender.com/${chat.profile_photo}`
+        : " https://prolinker-pqo7.onrender.com/uploads/profile/dummy_image.png"}
         className="w-10 h-10 rounded-full object-cover"
       />
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:8000"
+const API = " https://prolinker-pqo7.onrender.com"
 
 export const toggleLike = async (postId) => {
   const res = await axios.post(

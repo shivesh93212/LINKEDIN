@@ -64,8 +64,8 @@ export default function Notifications(){
      <img
       src={
         n.actor.profile_photo
-        ? `https://prolinker-zmjm.onrender.com/${n.actor.profile_photo}`
-        :  "https://prolinker-zmjm.onrender.com/uploads/profile/dummy_image.png"
+        ? ` https://prolinker-pqo7.onrender.com/${n.actor.profile_photo}`
+        :  " https://prolinker-pqo7.onrender.com/uploads/profile/dummy_image.png"
       }
       className="w-10 h-10 rounded-full object-cover border"
      />

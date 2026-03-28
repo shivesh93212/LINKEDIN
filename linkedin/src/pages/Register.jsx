@@ -57,7 +57,7 @@ export default function Register(){
         <AuthLayout>
              <div className="bg-white w-full max-w-md rounded-xl shadow-md p-6 sm:p-8">
                 <h2 className="text-2xl font-semibold text-gray-900">
-                    Join LinkedIn
+                    Join ProLinker
                 </h2>
                 <p className="text-sm text-gray-600 mt-1">
                      Make the most of your professional life

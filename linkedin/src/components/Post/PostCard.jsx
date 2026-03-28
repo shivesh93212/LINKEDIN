@@ -99,7 +99,7 @@ useEffect(()=>{
   try{
     const token=localStorage.getItem("token")
 
-    const res=await axios.get("https://prolinker-zmjm.onrender.com/chat/list",{
+    const res=await axios.get(" https://prolinker-pqo7.onrender.com/chat/list",{
       headers:{Authorization:`Bearer ${token}`}
     })
 
@@ -119,7 +119,7 @@ const sendShare=async()=>{
 
     const token=localStorage.getItem("token")
 
-    await axios.post("https://prolinker-zmjm.onrender.com/chat/send",
+    await axios.post("https://prolinker-pqo7.onrender.com/chat/send",
     {
       receiver_id:selectedUser,
       content:`[POST_SHARE]${post.id}`
@@ -231,10 +231,10 @@ const sendShare=async()=>{
       {post.image_url && (
         <div className="mt-3 w-full overflow-hidden rounded-lg">
           <img
-            src={`https://prolinker-zmjm.onrender.com/${post.image_url}`}
+            src={` https://prolinker-pqo7.onrender.com/${post.image_url}`}
             alt="post"
             className="rounded-lg w-full border border-gray-300 object-cover"
-            onClick={()=>setSelectedImage(`https://prolinker-zmjm.onrender.com/${post.image_url}`)}
+            onClick={()=>setSelectedImage(` https://prolinker-pqo7.onrender.com/${post.image_url}`)}
           />
         </div>
       )}

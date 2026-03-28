@@ -164,8 +164,8 @@ useEffect(() => {
                 preview
                   ? preview
                   : profileUser?.profile_photo
-                  ? `https://prolinker-zmjm.onrender.com/${profileUser.profile_photo}`
-                  : "https://prolinker-zmjm.onrender.com/uploads/profile/dummy_image.png"
+                  ? ` https://prolinker-pqo7.onrender.com/${profileUser.profile_photo}`
+                  : " https://prolinker-pqo7.onrender.com/uploads/profile/dummy_image.png"
               }
               alt="profile"
               className="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white object-cover shadow-lg"

@@ -151,9 +151,9 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
             />
           </label>
 
-          <button className="p-2 rounded-full hover:bg-gray-200">
+          {/* <button className="p-2 rounded-full hover:bg-gray-200">
             <Video size={20} />
-          </button>
+          </button> */}
 
           <button className="p-2 rounded-full hover:bg-gray-200">
             <Calendar size={20} /> 

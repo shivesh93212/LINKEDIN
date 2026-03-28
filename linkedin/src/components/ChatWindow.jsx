@@ -54,7 +54,8 @@ export default function ChatWindow({ user, back }) {
     if (!token) return;
 
    const socket = new WebSocket(
-  `wss://prolinker-zmjm.onrender.com/ws/chat?token=${token}`
+  `wss://prolinker-pq07.onrender.com/ws/chat?token=${token}`
+   
 );
 
     socketRef.current = socket;
@@ -127,7 +128,7 @@ export default function ChatWindow({ user, back }) {
 
   useEffect(()=>{
     if(!user?.name && user?.user_id){
-      fetch(`https://prolinker-zmjm.onrender.com/users/${user.user_id}`)
+      fetch(` https://prolinker-pqo7.onrender.com/users/${user.user_id}`)
       .then(res=>res.json())
       .then(data=>{
         user.name=data.name
