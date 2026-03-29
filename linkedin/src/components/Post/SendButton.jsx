@@ -13,7 +13,7 @@ export default function SendButton({ onClick }){
             <Send size={14}/>
            </button>
 
-           <p className="mt-[2px] font-semibold text-[12px] hover:text-blue-600">
+           <p className="mt-[2px] font-semibold text-[12px]">
             Share
            </p>
 
