@@ -165,7 +165,7 @@ useEffect(() => {
                   ? preview
                   : profileUser?.profile_photo
                   ? profileUser.profile_photo   // direct Cloudinary URL
-                  : "https://via.placeholder.com/150" // fallback
+                  : "https://res.cloudinary.com/dlpxi5foo/image/upload/f_auto,q_auto/dummy_image_nxvwnc" // fallback
               }
               alt="profile"
               className="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white object-cover shadow-lg"
