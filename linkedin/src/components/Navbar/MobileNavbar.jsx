@@ -114,7 +114,7 @@ useEffect(()=>{
         className="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer"
       >
         <img
-          src={user?.profile_photo || "https://via.placeholder.com/150"}
+          src={user?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
           className="w-10 h-10 rounded-full"
         />
 
