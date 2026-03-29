@@ -160,16 +160,18 @@ useEffect(() => {
         <div className="absolute -bottom-16 left-6">
           <div className="relative">
             <img
-             src={
-                preview
-                  ? preview
-                  : profileUser?.profile_photo
-                  ? profileUser.profile_photo   // direct Cloudinary URL
-                  : "https://res.cloudinary.com/dlpxi5foo/image/upload/f_auto,q_auto/dummy_image_nxvwnc" // fallback
-              }
-              alt="profile"
-              className="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white object-cover shadow-lg"
-            />
+  src={
+    preview ||
+    profileUser?.profile_photo ||
+    "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"
+  }
+  alt="profile"
+  onError={(e) => {
+    e.target.src =
+      "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc";
+  }}
+  className="w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white object-cover shadow-lg"
+/>
 
             {isOwnProfile && (
             <button
