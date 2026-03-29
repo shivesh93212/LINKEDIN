@@ -120,7 +120,7 @@ export default function DesktopNavbar() {
               to="/"
               className="bg-blue-600 text-white font-bold text-2xl px-2 py-1 rounded"
             >
-              in
+              pL
             </Link>
 
             {/* Search bar */}
