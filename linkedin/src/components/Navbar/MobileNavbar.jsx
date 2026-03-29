@@ -115,6 +115,11 @@ useEffect(()=>{
       >
         <img
           src={user?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
+          alt="user"
+  onError={(e) => {
+    e.target.src =
+      "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc";
+  }}
           className="w-10 h-10 rounded-full"
         />
 
