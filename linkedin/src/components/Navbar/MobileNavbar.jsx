@@ -114,14 +114,19 @@ useEffect(()=>{
         className="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer"
       >
         <img
-          src={user?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
-          alt="user"
+  src={
+    user?.profile_photo?.trim()
+      ? user.profile_photo
+      : "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"
+  }
+  alt="user"
   onError={(e) => {
-    e.target.src =
+    e.currentTarget.onerror = null; // infinite loop se bachata hai
+    e.currentTarget.src =
       "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc";
   }}
-          className="w-10 h-10 rounded-full"
-        />
+  className="w-10 h-10 rounded-full object-cover"
+/>
 
         <div>
           <p className="font-semibold text-sm">{user.name}</p>
