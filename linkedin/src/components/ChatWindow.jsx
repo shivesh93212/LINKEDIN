@@ -54,7 +54,7 @@ export default function ChatWindow({ user, back }) {
     if (!token) return;
 
    const socket = new WebSocket(
-  `wss://prolinker-pq07.onrender.com/ws/chat?token=${token}`
+  `wss://prolinker-pqo7.onrender.com/ws/chat?token=${token}`
    
 );
 
