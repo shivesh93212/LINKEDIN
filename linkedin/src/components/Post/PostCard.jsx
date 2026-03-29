@@ -145,10 +145,19 @@ const sendShare=async()=>{
         <div className="flex items-start gap-3">
           <Link to={`/profile/${post.user.id}`}>
           <img
-            src={post.user?.profile_photo || "https://via.placeholder.com/150"}
-            alt="user"
-            className="w-12 h-12 rounded-full"
-          />
+  src={
+    post.user?.profile_photo?.trim()
+      ? post.user.profile_photo
+      : "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"
+  }
+  alt="user"
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src =
+      "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc";
+  }}
+  className="w-12 h-12 rounded-full object-cover"
+/>
           </Link>
 
           <div>
