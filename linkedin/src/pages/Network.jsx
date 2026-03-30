@@ -90,11 +90,11 @@ export default function Network() {
             <Link to={`/profile/${request.sender?.id}`}>
            <div className="flex items-center gap-3">
           <img
-            src={req.sender?.profile_photo || "https://via.placeholder.com/150"}
+            src={req.sender?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
             className="w-10 h-10 rounded-full"
             />
 
-           <p className="font-medium">{req.sender?.name || "https://via.placeholder.com/150"}</p>
+           <p className="font-medium">{req.sender?.name || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}</p>
              </div>
              </Link>
 

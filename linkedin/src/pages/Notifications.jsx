@@ -65,7 +65,7 @@ export default function Notifications(){
      src={
         n.actor?.profile_photo
         ? n.actor.profile_photo   // Cloudinary URL direct
-        : "https://via.placeholder.com/150"  // fallback image
+        : "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc" // fallback image
       }
       className="w-10 h-10 rounded-full object-cover border"
      />
