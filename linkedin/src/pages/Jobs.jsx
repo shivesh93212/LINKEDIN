@@ -11,18 +11,31 @@ const [loading,setLoading]=useState(false)
 const navigate = useNavigate()
 
 const handleSearch=async()=>{
-  if(!query) return
+  if(!query.trim()) return
   setLoading(true)
+  setJobs([])
+
+     let isTimeOut=false;
+     const timeout=setTimeout(()=>{
+       isTimeOut=true
+       setLoading(false)
+     },7000)
 
   try{
     const data = await jobApi(query)
-    setJobs(data.results)
+    if(!isTimeOut){
+    setJobs(data.results || [])
+    setLoading(false)
+    clearTimeout(timeout)
   }
+}
   catch(err){
      console.log(err)
+     clearTimeout(timeout)
+     setLoading(false)
   }
 
-  setLoading(false)
+ 
 }
 
   return ( 
@@ -61,9 +74,9 @@ const handleSearch=async()=>{
 
         <button
          onClick={handleSearch}
-         disabled={loading}
+         disabled={loading || !query.trim()}
          className="bg-blue-600 rounded-full text-gray-200  p-1 pl-3 pr-3 font-semibold hover:bg-blue-700">
-          Search
+          {loading ? "Searching..." : "Search"}
         </button>
        </div>
 
@@ -77,11 +90,11 @@ const handleSearch=async()=>{
 
        {/* no jobs */}
 
-       {/* {loading && jobs.length===0 && query &&(
+       {!loading && jobs.length===0 && query &&(
         <p className="ml-4 text-red-500 font-semibold">
-          No jobs found
+          No jobs found or server is slow. Try again.
         </p>
-       )} */}
+       )}
 
        {/* job list */}
        
