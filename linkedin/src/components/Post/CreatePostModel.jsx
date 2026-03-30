@@ -76,7 +76,7 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
     onClose();
   } catch (err) {
-    setErr(err.response?.data?.detail || "Post creation failed");
+    setErr("Post creation failed");
   } finally {
     setLoading(false);
   }
@@ -108,7 +108,7 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
         {/* USER INFO */}
         <div className="flex items-center gap-3 px-4 py-4">
-          <img src={user?.profile_photo || "https://via.placeholder.com/150"} alt="profile" 
+          <img src={user?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"} alt="profile" 
           className= "w-12 h-12 rounded-full object-cover"
           />
 
@@ -168,13 +168,13 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
             <Video size={20} />
           </button> */}
 
-          <button className="p-2 rounded-full hover:bg-gray-200">
+          {/* <button className="p-2 rounded-full hover:bg-gray-200">
             <Calendar size={20} /> 
           </button>
 
           <button className="p-2 rounded-full hover:bg-gray-200">
             <FileText size={20} />
-          </button>
+          </button> */}
         </div>
 
         {/* FOOTER */}
