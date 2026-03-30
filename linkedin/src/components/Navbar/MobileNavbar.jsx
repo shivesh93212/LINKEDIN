@@ -82,7 +82,7 @@ useEffect(()=>{
           <Link to="/profile">
             {/* ✅ FIXED: profile click -> profile page */}
             <img
-              src={user?.profile_photo  || "https://via.placeholder.com/150"}
+              src={user?.profile_photo  || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
               alt="profile"
               className="w-9 h-9 rounded-full border border-gray-500"
             />

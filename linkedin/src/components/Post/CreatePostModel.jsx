@@ -108,7 +108,8 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
         {/* USER INFO */}
         <div className="flex items-center gap-3 px-4 py-4">
-          <img src={user?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"} alt="profile" 
+          <img src={user?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
+          alt="profile" 
           className= "w-12 h-12 rounded-full object-cover"
           />
 
