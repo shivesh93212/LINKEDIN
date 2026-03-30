@@ -114,7 +114,7 @@ export default function CreatePostModel({ isOpen, onClose,onPostCreated }) {
 
           <div>
             <h3 className="font-semibold text-gray-900">{user?.name}</h3>
-            <p className="text-xs text-gray-500">Post to Anyone</p>
+            <p className="text-xs text-gray-500">Post to anything...</p>
           </div>
         </div>
          
