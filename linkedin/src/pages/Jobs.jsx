@@ -7,11 +7,13 @@ export default function Jobs() {
 const [query,setQuery]=useState("")
 const [jobs,setJobs]=useState([])
 const [loading,setLoading]=useState(false)
+const [hasSearched, setHasSearched] = useState(false);
 
 const navigate = useNavigate()
 
 const handleSearch=async()=>{
   if(!query.trim()) return
+  setHasSearched(true)
   setLoading(true)
   setJobs([])
 
@@ -90,7 +92,7 @@ const handleSearch=async()=>{
 
        {/* no jobs */}
 
-       {!loading && jobs.length===0 && query &&(
+       {!loading && jobs.length===0 && query && hasSearched &&(
         <p className="ml-4 text-red-500 font-semibold">
           No jobs found or server is slow. Try again.
         </p>
