@@ -84,7 +84,7 @@ export default function Login(){
                 <form  onSubmit={handleLogin} className="mt-6 space-y-4">
                     <div>
                         <label className="text-sm text-gray-700 font-medium">
-                            Email or Phone
+                            Email
                             </label>
 
                             <input
@@ -110,14 +110,14 @@ export default function Login(){
                             />
                         </div>
 
-                        <div className="flex justify-end">
+                        {/* <div className="flex justify-end">
                             <button
                             type="button"
                             className="text-sm font-semibold text-blue-600 hover:underline"
                             >
                                 Forgot password?
                             </button>
-                        </div>
+                        </div> */}
                         
                         <button
                         type="submit"
@@ -133,12 +133,12 @@ export default function Login(){
           <div className="h-[1px] bg-gray-300 flex-1"></div>
         </div>
 
-        <button className="w-full border border-gray-400 py-2 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
+        {/* <button className="w-full border border-gray-400 py-2 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
             Sign in with Google
-        </button>
+        </button> */}
 
         <p className="text-center text-sm text-gray-600 mt-6">
-            New to LinkedIn?{""}
+            New to ProLinker?{""}
             <Link
             to="/register"
             className="text-blue-600 font-semibold  hover:underline"

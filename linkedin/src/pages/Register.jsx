@@ -132,12 +132,12 @@ export default function Register(){
                    <div className="h-[1px] bg-gray-300 flex-1"></div>
                  </div>
                  
-                <button className="w-full border border-gray-400 py-2 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
+                {/* <button className="w-full border border-gray-400 py-2 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
                     Sign up with Google
-                </button>
+                </button> */}
 
                 <p className="text-center text-sm text-gray-600 mt-6">
-                    Already on LinkedIn?{""}
+                    Already on ProLinker?{""}
                     <Link
                     to="/login"
                     className="text-blue-600 font-semibold hover:underline"
