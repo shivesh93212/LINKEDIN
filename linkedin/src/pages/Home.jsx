@@ -13,13 +13,25 @@ function Home() {
 
   const [isPostModelOpen, setIsPostModelOpen] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchFeed = async () => {
     try {
+      setLoading(true)
+      const timeout=setTimeout(()=>{
+        setLoading(false)
+      },6000)
+
       const data = await getAllPosts();
+
+      clearTimeout(timeout)
+
       setPosts(data);
+      setLoading(false)
+
     } catch (err) {
       console.log("Feed error:", err);
+      setLoading
     }
   };
 
@@ -47,7 +59,7 @@ function Home() {
               <div className="flex flex-col items-center -mt-7 p-4">
                 
                 <img
-                  src={user?.profile_photo || "https://via.placeholder.com/150"}
+                  src={user?.profile_photo || "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
                   alt="profile"
                   className="w-16 h-16 rounded-full border-2 border-white"
                 />
@@ -71,7 +83,7 @@ function Home() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 hidden md:block">
               <div className="flex items-center gap-3">
                 <img
-                  src={user?.profile_photo || "https://via.placeholder.com/150"}
+                  src={user?.profile_photo ||  "https://res.cloudinary.com/dlpxi5foo/image/upload/w_150,h_150,c_fill,f_auto,q_auto/dummy_image_nxvwnc"}
                   alt="profile"
                   className="w-12 h-12 rounded-full"
                 />
@@ -86,7 +98,12 @@ function Home() {
             </div>
 
             {/* POSTS LIST */}
-            {posts.length === 0 ? (
+            
+            {loading ? (
+              <p className="text-center text-gray-500 text-sm">
+                Loading posts...
+              </p>
+            ) : posts.length === 0 ? (
               <p className="text-center text-gray-500 text-sm">
                 No posts found...
               </p>
