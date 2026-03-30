@@ -77,7 +77,7 @@ const handleSearch=async()=>{
 
        {/* no jobs */}
 
-       {!loading && jobs.length===0 && query &&(
+       {loading && jobs.length===0 && query &&(
         <p className="ml-4 text-red-500 font-semibold">
           No jobs found
         </p>
